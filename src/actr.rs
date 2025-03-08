@@ -1,10 +1,16 @@
+
+
 use std::ffi::{c_char, c_void};
-enum StringEncoding {
+#[repr(C)]
+#[allow(dead_code)]
+pub enum StringEncoding {
 	ASCII, UTF8, UTF16
 }
 // when passing string to the platform you typically pass the pointer and the string length
 // for example
 // returns 1 if current user is authenticated, meaning your program can persist data and use other required authentication features
+#[allow(unused_variables)]
+#[allow(dead_code)]
 unsafe extern {
 	// actr_performance
 	// expose browsers performance.now()
@@ -18,7 +24,7 @@ unsafe extern {
 	// @param line
 	// @param column
 
-	pub fn abort(message: *const &str, fileName: *const &str, line: i32, column: i32);
+	pub fn abort(message: *const u8, fileName: *const u8, line: i32, column: i32);
 
 	// actr_authenticated
 
@@ -105,7 +111,7 @@ unsafe extern {
 	// @param ptr
 	// @param length
 
-	pub fn _actr_canvas2d_fill_text_length(x: f32, y: f32, ptr: *const &str, length: i32);
+	pub fn _actr_canvas2d_fill_text_length(x: f32, y: f32, ptr: *const u8, length: i32);
 
 	// actr_canvas2d_fill_gradient_all
 	// fill a gradient of many colors useful for color picker
@@ -183,7 +189,7 @@ unsafe extern {
 	// @param urlLength
 	// @param jsonId
 
-	pub fn _actr_fetch_json_length(url: *const &str, urlLength: u32, jsonId: i32) -> i32;
+	pub fn _actr_fetch_json_length(url: *const u8, urlLength: u32, jsonId: i32) -> i32;
 
 	// _actr_fetch_image_length
 	// fetch the image from the provided url
@@ -191,7 +197,7 @@ unsafe extern {
 	// @param urlLength
 	// @param jsonId
 
-	pub fn _actr_fetch_image_length(url: *const &str, urlLength: u32, jsonId: i32) -> i32;
+	pub fn _actr_fetch_image_length(url: *const u8, urlLength: u32, jsonId: i32) -> i32;
 
 	// _actr_fetch_text_length
 	// fetch text from the provided url
@@ -201,7 +207,7 @@ unsafe extern {
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_fetch_text_length(url: *const &str, urlLength: u32, jsonId: i32, path: *const &str, pathLength: u32) -> i32;
+	pub fn _actr_fetch_text_length(url: *const u8, urlLength: u32, jsonId: i32, path: *const u8, pathLength: u32) -> i32;
 
 	// actr_free
 	// free allocated memory
@@ -235,21 +241,21 @@ unsafe extern {
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_json_get_int_length(jsonId: i32, path: *const &str, pathLength: u32) -> i64;
+	pub fn _actr_json_get_int_length(jsonId: i32, path: *const u8, pathLength: u32) -> i64;
 
 	// _actr_json_get_float_length
 	// @param jsonId
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_json_get_float_length(jsonId: i32, path: *const &str, pathLength: u32) -> f64;
+	pub fn _actr_json_get_float_length(jsonId: i32, path: *const u8, pathLength: u32) -> f64;
 
 	// _actr_json_get_string_length
 	// @param jsonId
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_json_get_string_length(jsonId: i32, path: *const &str, pathLength: u32) -> i32;
+	pub fn _actr_json_get_string_length(jsonId: i32, path: *const u8, pathLength: u32) -> i32;
 
 	// _actr_json_set_int_length
 	// @param jsonId
@@ -257,7 +263,7 @@ unsafe extern {
 	// @param pathLength
 	// @param value
 
-	pub fn _actr_json_set_int_length(jsonId: i32, path: *const &str, pathLength: u32, value: i64);
+	pub fn _actr_json_set_int_length(jsonId: i32, path: *const u8, pathLength: u32, value: i64);
 
 	// _actr_json_set_float_length
 	// @param jsonId
@@ -265,7 +271,7 @@ unsafe extern {
 	// @param pathLength
 	// @param value
 
-	pub fn _actr_json_set_float_length(jsonId: i32, path: *const &str, pathLength: u32, value: f64);
+	pub fn _actr_json_set_float_length(jsonId: i32, path: *const u8, pathLength: u32, value: f64);
 
 	// _actr_json_set_string_length
 	// @param jsonId
@@ -274,7 +280,7 @@ unsafe extern {
 	// @param value
 	// @param valueLength
 
-	pub fn _actr_json_set_string_length(jsonId: i32, path: *const &str, pathLength: u32, value: *const &str, valueLength: u32);
+	pub fn _actr_json_set_string_length(jsonId: i32, path: *const u8, pathLength: u32, value: *const u8, valueLength: u32);
 
 	// actr_json_store
 	// persist the json object to server storage
@@ -299,7 +305,7 @@ unsafe extern {
 	// @param message
 	// @param length
 
-	pub fn _actr_log_length(message: *const &str, length: usize);
+	pub fn _actr_log_length(message: *const u8, length: usize);
 
 	// actr_malloc
 	// allocate memory, do not use if your assembly has it's own runtime for memory
