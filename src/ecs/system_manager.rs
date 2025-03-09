@@ -3,18 +3,27 @@ use std::{any::TypeId, collections::HashMap};
 use super::{system::System, Entity, Signature};
 
 pub struct SystemManager {
-    systems: HashMap<usize, System>
+    signatures: HashMap<TypeId, Signature>,
+    systems: HashMap<usize, System>,
 }
 
 impl SystemManager {
     pub fn new() -> SystemManager {
         SystemManager {
+            signatures: HashMap::new(),
             systems: HashMap::new(),
         }
     }
     pub fn register_system<T>(&mut self, system: System)
     {
         self.systems.insert(system.id, system);
+    }
+    pub fn set_signature<T>(&mut self, signature: Signature)
+    where
+        T: 'static
+    {
+        let id = TypeId::of::<T>();
+        self.signatures.insert(id, signature);
     }
     pub fn entity_destroyed(&mut self, entity: Entity) {
         for (id, system) in self.systems.iter_mut() {
@@ -31,5 +40,5 @@ impl SystemManager {
             }
         }
     }
-    
+
 }
