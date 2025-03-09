@@ -1,6 +1,6 @@
 use std::{any::TypeId, collections::HashMap};
 
-use super::{signature::Signature, system::{System}, Entity};
+use super::{component_manager::ComponentManager, coordinator::{self, Coordinator}, signature::Signature, system::System, Entity};
 
 pub struct SystemManager {
     signatures: HashMap<TypeId, Signature>,
@@ -42,6 +42,12 @@ impl SystemManager {
             } else {
                 system.entity_remove(entity);
             }
+        }
+    }
+
+    pub fn update(&self, component_manager: &mut ComponentManager, delta: f64) {
+        for (id, system) in self.systems.iter() {
+            (system.update_function)(component_manager, &system.entities, delta)
         }
     }
 

@@ -72,5 +72,7 @@ impl Coordinator {
         self.system_manager.set_signature::<T>(signature);
     }
 
-    pub fn
+    pub fn update(&mut self, delta: f64) {
+        self.system_manager.update(&mut self.component_manager, delta);
+    }
 }

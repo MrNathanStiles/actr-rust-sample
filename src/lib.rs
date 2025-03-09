@@ -7,7 +7,7 @@ use std::collections::HashSet;
 
 use actr::{_actr_log_length, actr_performance};
 use component::transform::Transform;
-use ecs::{coordinator::Coordinator, signature::Signature, system::System, Entity, MAX_ENTITIES};
+use ecs::{component_manager::ComponentManager, coordinator::Coordinator, signature::Signature, system::System, Entity, MAX_ENTITIES};
 use state::State;
 
 #[unsafe(no_mangle)]
@@ -15,7 +15,7 @@ pub extern fn actr_construct() -> *mut State {
     Box::into_raw(Box::new(State::new()))
 }
 
-fn update_sample_system(ecs: &mut Coordinator, entities: &HashSet<Entity>, delta: f64) {
+fn update_sample_system(ecs: &mut ComponentManager, entities: &HashSet<Entity>, delta: f64) {
     for entity in entities.iter() {
         let cmp = ecs.get_component::<Transform>(*entity);
         cmp.position.x += 1.0 * delta;
