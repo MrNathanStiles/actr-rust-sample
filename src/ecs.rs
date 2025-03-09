@@ -1,3 +1,4 @@
+pub mod coordinator;
 pub mod component_manager;
 pub mod component_array;
 pub mod entity_manager;
