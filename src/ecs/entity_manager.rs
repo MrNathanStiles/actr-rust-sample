@@ -1,6 +1,6 @@
 use queues::{IsQueue, Queue};
 
-use super::{Entity, Signature, MAX_ENTITIES};
+use super::{signature::Signature, Entity, MAX_ENTITIES};
 
 
 pub struct EntityManager {
@@ -27,7 +27,7 @@ impl EntityManager {
         id
     }
     pub fn destroy_entity(&mut self, entity: Entity) {
-        self.signatures[entity] = 0;
+        self.signatures[entity] = Signature::zero();
         self.available.add(entity);
         self.alive -= 1;
     }

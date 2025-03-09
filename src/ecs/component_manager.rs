@@ -1,7 +1,7 @@
 use std::{ any::TypeId, collections::HashMap, ptr };
 use super::{component_array::{ComponentArray, ComponentArrayGeneric}, Entity};
 
-pub type ComponentType = u8;
+pub type ComponentType = u64;
 pub const MAX_COMPONENTS: ComponentType = 64;
 
 pub struct ComponentManager {
@@ -12,14 +12,16 @@ pub struct ComponentManager {
 }
 
 impl ComponentManager {
+    
     pub fn new() -> ComponentManager {
         ComponentManager {
             component_array: HashMap::new(),
             component_array_generic: HashMap::new(),
             component_types: HashMap::new(),
-            next_component_type: 0,
+            next_component_type: 1,
         }
     }
+
     pub fn count(&self) -> usize {
         self.component_array.len()
     }
@@ -82,7 +84,8 @@ impl ComponentManager {
         let id = &TypeId::of::<T>();
         let result = self.component_array.get(id).unwrap();
         let result = result.cast::<ComponentArray<T>>();
-        unsafe { &mut *result }
+        unsafe { result.as_mut().unwrap() }
+        
     }
 
     pub fn zget<T>(&self, index: usize)

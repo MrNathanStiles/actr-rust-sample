@@ -1,5 +1,11 @@
 use super::{
-    component_array::ComponentArray, component_manager::ComponentManager, entity_manager::EntityManager, system::System, system_manager::SystemManager, Entity, Signature
+    Entity,
+    component_array::ComponentArray,
+    component_manager::{ComponentManager, ComponentType},
+    entity_manager::EntityManager,
+    signature::Signature,
+    system::System,
+    system_manager::SystemManager,
 };
 
 pub struct Coordinator {
@@ -39,33 +45,32 @@ impl Coordinator {
     }
     pub fn remove_component<T>(&mut self, entity: Entity)
     where
-        T: 'static
+        T: 'static,
     {
         self.component_manager.remove_component::<T>(entity);
     }
     pub fn get_component<T>(&mut self, entity: Entity) -> &mut T
     where
-        T: 'static
+        T: 'static,
     {
         self.component_manager.get_component::<T>(entity)
     }
-    pub fn get_component_type<T>(&self)
+    pub fn get_component_type<T>(&self) -> ComponentType
     where
-        T: 'static
+        T: 'static,
     {
-        self.component_manager.get_component_type::<T>();
+        self.component_manager.get_component_type::<T>()
     }
-    pub fn register_system<T>(&mut self, system: System)
-    where
-        T: 'static
-    {
-            self.system_manager.register_system::<T>(system)
+    pub fn register_system(&mut self, system: System) {
+        self.system_manager.register_system(system)
     }
 
     pub fn set_system_signature<T>(&mut self, signature: Signature)
-    where 
-        T: 'static
+    where
+        T: 'static,
     {
         self.system_manager.set_signature::<T>(signature);
     }
+
+    pub fn
 }
