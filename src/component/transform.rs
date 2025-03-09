@@ -1,9 +1,11 @@
-use crate::data::vector3::Vector3;
+use super::vector3::Vector3;
+
 
 pub struct Transform {
     pub position: Vector3,
     pub rotation: Vector3
 }
+
 impl Transform {
     pub fn new() -> Transform {
         Transform { position: Vector3::new(), rotation: Vector3::new() }
