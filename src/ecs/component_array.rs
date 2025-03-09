@@ -3,6 +3,9 @@ use std::ptr;
 
 use super::{Entity, MAX_ENTITIES};
 
+pub trait IComponentArray {
+    fn entity_destroyed(&mut self);
+}
 
 pub struct ComponentArray<T> {
     pointer: *mut T,

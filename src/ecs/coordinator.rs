@@ -1,4 +1,4 @@
-use super::{component_manager::ComponentManager, entity_manager::EntityManager, system_manager::SystemManager};
+use super::{component_manager::ComponentManager, entity_manager::EntityManager, system_manager::SystemManager, Entity};
 
 pub struct Coordinator {
     entity_manager: EntityManager,
@@ -13,5 +13,12 @@ impl Coordinator {
             component_manager: ComponentManager::new(),
             system_manager: SystemManager::new(),
         }
+    }
+    pub fn create_entity(&mut self) -> Entity {
+        self.entity_manager.create_entity()
+    }
+    pub fn destroy_entity(&mut self, entity: Entity) {
+        self.entity_manager.destroy_entity(entity);
+        self.component_manager.e
     }
 }
