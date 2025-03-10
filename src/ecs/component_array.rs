@@ -71,6 +71,7 @@ impl ComponentArray {
 
         let mut _existing = unsafe{ self.generic_pointer.add(index) as *mut T};
         _existing = &mut cmp;
+        self.component_count += 1;
     }   
 
 
@@ -80,6 +81,7 @@ impl ComponentArray {
     {
         let index = self.entity_to_index.get(&entity).unwrap();
         let pointer = self.generic_pointer as *mut T;
+        let pointer = unsafe { pointer.add(*index) };
         unsafe { &mut *pointer.add(*index) }
     }
 

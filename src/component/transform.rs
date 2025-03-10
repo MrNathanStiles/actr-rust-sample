@@ -1,6 +1,5 @@
 use super::vector3::Vector3;
 
-
 pub struct Transform {
     pub position: Vector3,
     pub rotation: Vector3
@@ -17,5 +16,5 @@ impl Clone for Transform {
         Self { position: self.position.clone(), rotation: self.rotation.clone() }
     }
 }
-impl Copy for Transform { }
 
+impl Copy for Transform { }

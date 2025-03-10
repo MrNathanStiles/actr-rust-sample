@@ -18,7 +18,10 @@ pub extern fn actr_construct() -> *mut State {
 fn update_sample_system(ecs: &mut ComponentManager, entities: &HashSet<Entity>, delta: f64) {
     for entity in entities.iter() {
         let cmp = ecs.get_component::<Transform>(*entity);
-        cmp.position.x += 1.0 * delta;
+        cmp.position.x += 1.0;// * delta;
+        let position = cmp.position;
+        let x = cmp.position.x;
+        log(format!("entity {entity} pos x {x}"));
     }
 }
 
@@ -35,12 +38,12 @@ pub extern fn actr_init(state_pointer: *mut State, _w: f32, _h: f32) {
     state.ecs.register_component::<Transform>();
     register_sample_system(state);
     
-    for n in 0..4000 {
+    for n in 0..4 {
         let entity = state.ecs.create_entity();
         state.ecs.add_component(entity, Transform::new());
     }
-    
 }
+
 
 #[unsafe(no_mangle)]
 pub extern fn actr_step(state_pointer: *mut State, delta: f64) {
