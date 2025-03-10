@@ -1,4 +1,4 @@
-use crate::ecs::{component_manager::ComponentManager, coordinator::Coordinator, entity_manager::EntityManager, system_manager::SystemManager};
+use crate::ecs::coordinator::Coordinator;
 
 pub struct State {
     pub ecs: Coordinator,
@@ -7,7 +7,7 @@ pub struct State {
 impl State {
     pub fn new() -> State {
         State {
-            ecs: Coordinator::new()
+            ecs: Coordinator::new(),
         }
     }
 }

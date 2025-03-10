@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use super::{component_manager::ComponentManager, coordinator::Coordinator, signature::Signature, Entity};
+use super::{Entity, component_manager::ComponentManager, signature::Signature};
 
 static mut OBJECT_COUNTER: usize = 0;
 
@@ -12,15 +12,18 @@ pub struct System {
 }
 
 impl System {
-    pub fn new(signature: Signature, update_function: fn(&mut ComponentManager, &HashSet<Entity>, f64) -> ()) -> System {
-        unsafe { 
+    pub fn new(
+        signature: Signature,
+        update_function: fn(&mut ComponentManager, &HashSet<Entity>, f64) -> (),
+    ) -> System {
+        unsafe {
             let result = System {
                 id: OBJECT_COUNTER,
                 signature,
                 update_function,
                 entities: HashSet::new(),
             };
-            OBJECT_COUNTER += 1; 
+            OBJECT_COUNTER += 1;
             result
         }
     }
