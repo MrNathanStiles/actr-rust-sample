@@ -44,7 +44,6 @@ impl SystemManager {
             }
         }
     }
-
     
     pub fn update(&self, component_manager: &mut ComponentManager, delta: f64) {
         for (id, system) in self.systems.iter() {

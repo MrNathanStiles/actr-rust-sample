@@ -1,4 +1,4 @@
-use std::{alloc::{self, Layout}, any::TypeId, collections::HashMap, fmt::Pointer};
+use std::{alloc::{self, Layout}, collections::HashMap};
 use std::ptr;
 
 use super::{Entity, MAX_ENTITIES};
@@ -42,6 +42,7 @@ impl ComponentArray {
             self.remove_data(entity);
         }
     }
+
     pub fn remove_data(&mut self, entity: Entity) {
         let index_removed = *self.entity_to_index.get(&entity).unwrap();
         let index_last = self.component_count - 1;
@@ -81,4 +82,5 @@ impl ComponentArray {
         let pointer = self.generic_pointer as *mut T;
         unsafe { &mut *pointer.add(*index) }
     }
+
 }

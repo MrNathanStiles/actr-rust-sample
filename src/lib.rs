@@ -31,27 +31,15 @@ fn register_sample_system(state: &mut State) {
 
 #[unsafe(no_mangle)]
 pub extern fn actr_init(state_pointer: *mut State, _w: f32, _h: f32) {
-    
-    //let state = unsafe { state_pointer.as_mut().unwrap() };
     let state = unsafe { state_pointer.as_mut().unwrap() };
-
     state.ecs.register_component::<Transform>();
-
     register_sample_system(state);
     
-
     for n in 0..4000 {
         let entity = state.ecs.create_entity();
-        log(format!("adding component for entity {entity}"));  
         state.ecs.add_component(entity, Transform::new());
-        log(format!("added component for entity {entity}"));
     }
-    //let state = unsafe { &mut((((*state_pointer)))) };
-    //state.component_manager.register_component::<Transform>();
-    //let x = state.component.count();
-    //log(format!("init {x}"));
-
-    //let q = ComponentArray;
+    
 }
 
 #[unsafe(no_mangle)]
