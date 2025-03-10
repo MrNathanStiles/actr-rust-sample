@@ -1,5 +1,4 @@
 use queues::{IsQueue, Queue};
-use crate::actr::_actr_log_length;
 
 use super::{signature::Signature, Entity, MAX_ENTITIES};
 
@@ -23,15 +22,10 @@ impl EntityManager {
         }
         result
     }
-    pub fn log(&self, message: String) {
-        unsafe {
-            _actr_log_length(message.as_ptr(), message.len());
-        }
-    }
+    
     pub fn create_entity(&mut self) -> Entity {
         let id = self.available.remove().unwrap();
         self.alive += 1;
-        // self.log(format!("entity created {id}"));
         id
     }
     

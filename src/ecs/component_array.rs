@@ -3,9 +3,6 @@ use std::{
     alloc::{self, Layout},
     collections::HashMap,
 };
-
-use crate::actr::_actr_log_length;
-
 use super::{Entity, MAX_ENTITIES};
 
 pub struct ComponentArray {
@@ -43,25 +40,16 @@ impl ComponentArray {
     pub fn entity_destroyed(&mut self, entity: Entity) {
         if self.entity_to_index.contains_key(&entity) {
             self.remove_data(entity);
-        } else {
-            panic!("attempt to remove {entity}");
         }
     }
-    pub fn log(&self, message: String) {
-        unsafe {
-            _actr_log_length(message.as_ptr(), message.len());
-        }
-    }
+    
     pub fn remove_data(&mut self, entity: Entity) {
         let index_removed = *self.entity_to_index.get(&entity).unwrap();
-        if self.component_count == 0 {
-            panic!("component count already 0");
-        }
+        
         self.component_count -= 1;
         let index_last = self.component_count;
 
         if index_removed == index_last {
-            // self.log(format!("skipping entity {entity} index {index_removed}"));
             return;
         }
 
@@ -75,10 +63,6 @@ impl ComponentArray {
                 .generic_pointer
                 .add(index_last * self.component_size);
             let dst = self.generic_pointer.add(index_removed * self.component_size);
-            let src_addr = src.addr();
-            let dst_addr = dst.addr();
-            let sz =self.component_size;
-            // self.log(format!("entity {entity} index_removed {index_removed} index_last {index_last} entity_last {entity_last} copy {sz} from {src_addr} to {dst_addr}"));
             ptr::copy_nonoverlapping(src, dst, self.component_size);
         }
 
