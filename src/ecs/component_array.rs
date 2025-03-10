@@ -5,7 +5,6 @@ use std::{
 };
 
 use crate::actr::_actr_log_length;
-use crate::log;
 
 use super::{Entity, MAX_ENTITIES};
 
@@ -48,7 +47,7 @@ impl ComponentArray {
             panic!("attempt to remove {entity}");
         }
     }
-    pub fn log(message: String) {
+    pub fn log(&self, message: String) {
         unsafe {
             _actr_log_length(message.as_ptr(), message.len());
         }
@@ -62,7 +61,7 @@ impl ComponentArray {
         let index_last = self.component_count;
 
         if index_removed == index_last {
-            log(format!("skipping entity {entity} index {index_removed}"));
+            // self.log(format!("skipping entity {entity} index {index_removed}"));
             return;
         }
 
@@ -74,12 +73,12 @@ impl ComponentArray {
         unsafe {
             let src = self
                 .generic_pointer
-                .add(index_removed * self.component_size);
-            let dst = self.generic_pointer.add(index_last * self.component_size);
+                .add(index_last * self.component_size);
+            let dst = self.generic_pointer.add(index_removed * self.component_size);
             let src_addr = src.addr();
             let dst_addr = dst.addr();
             let sz =self.component_size;
-            log(format!("index_removed {index_removed} index_last {index_last} copy {sz} from {src_addr} to {dst_addr}"));
+            // self.log(format!("entity {entity} index_removed {index_removed} index_last {index_last} entity_last {entity_last} copy {sz} from {src_addr} to {dst_addr}"));
             ptr::copy_nonoverlapping(src, dst, self.component_size);
         }
 
@@ -93,6 +92,8 @@ impl ComponentArray {
         let index = self.component_count;
         self.entity_to_index.insert(entity, index);
         self.index_to_entity.insert(index, entity);
+
+        // self.log(format!("component insert entity {entity} index {index}"));
 
         unsafe {
             let pointer = self.generic_pointer as *mut T;
