@@ -19,8 +19,6 @@ fn update_sample_system(ecs: &mut ComponentManager, entities: &HashSet<Entity>, 
     for entity in entities.iter() {
         let cmp = ecs.get_component::<Transform>(*entity);
         cmp.position.x += 1.0 * delta;
-        let x = cmp.position.x;
-        log(format!("update sample system {x}"));
     }
 }
 
@@ -42,9 +40,11 @@ pub extern fn actr_init(state_pointer: *mut State, _w: f32, _h: f32) {
     register_sample_system(state);
     
 
-    for n in 0..10 {
-        let mut t = Transform::new();
-        state.ecs.add_component(n, &mut t);
+    for n in 0..4000 {
+        let entity = state.ecs.create_entity();
+        log(format!("adding component for entity {entity}"));  
+        state.ecs.add_component(entity, Transform::new());
+        log(format!("added component for entity {entity}"));
     }
     //let state = unsafe { &mut((((*state_pointer)))) };
     //state.component_manager.register_component::<Transform>();
@@ -55,22 +55,12 @@ pub extern fn actr_init(state_pointer: *mut State, _w: f32, _h: f32) {
 }
 
 #[unsafe(no_mangle)]
-pub extern fn actr_step(state_pointer: *mut State, _delta: f32) {
+pub extern fn actr_step(state_pointer: *mut State, delta: f64) {
     let state = unsafe { state_pointer.as_mut().unwrap() };
 
     let start = unsafe { actr_performance() };
 
-    for n in 0..MAX_ENTITIES {
-        //let t = state.component.get::<Transform>(n);
-
-        //t.position.x += 0.02;
-        //t.position.z = n as f64;
-        
-        //let x = t.position.x;
-        //let z = t.position.z;
-        //let x = state.component.count();
-        //log(format!("0 step {x},{z}"));
-    }
+    state.ecs.update(delta);
 
     let end = unsafe { actr_performance() };
 
@@ -81,7 +71,7 @@ pub extern fn actr_step(state_pointer: *mut State, _delta: f32) {
     
 }
 
-fn log(message: String) {
+pub fn log(message: String) {
     unsafe {
         _actr_log_length(message.as_ptr(), message.len());
     }

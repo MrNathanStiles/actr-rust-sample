@@ -34,15 +34,19 @@ impl Coordinator {
     where
         T: 'static,
     {
-        let ca = ComponentArray::<T>::new();
-        self.component_manager.register_component(ca);
+        self.component_manager.register_component::<T>();
     }
-    pub fn add_component<T>(&mut self, entity: Entity, component: &mut T)
+
+    pub fn add_component<T>(&mut self, entity: Entity, component: T)
     where
         T: 'static,
     {
         self.component_manager.add_component(entity, component);
+        let entity_signature = self.entity_manager.get_signature(entity);
+        entity_signature.set(self.component_manager.get_component_type::<T>());
+        self.system_manager.entity_signature_changed(entity, *entity_signature);
     }
+    
     pub fn remove_component<T>(&mut self, entity: Entity)
     where
         T: 'static,

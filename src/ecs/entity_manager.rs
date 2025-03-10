@@ -23,6 +23,7 @@ impl EntityManager {
     }
     pub fn create_entity(&mut self) -> Entity {
         let id = self.available.remove().unwrap();
+        self.signatures.push(Signature::new(0));
         self.alive += 1;
         id
     }
@@ -34,7 +35,8 @@ impl EntityManager {
     pub fn set_signature(&mut self, entity: Entity, signature: Signature) {
         self.signatures[entity] = signature;
     }
-    pub fn get_signature(&self, entity: Entity) -> Signature {
-        self.signatures[entity]
+    pub fn get_signature(&mut self, entity: Entity) -> &mut Signature {
+        self.signatures.get_mut(entity).unwrap()
     }
+    
 }

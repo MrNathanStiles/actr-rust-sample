@@ -8,4 +8,4 @@ pub mod system_manager;
 
 pub type Entity = usize;
 
-pub const MAX_ENTITIES: Entity = 256;
+pub const MAX_ENTITIES: Entity = 4096;
