@@ -1,21 +1,18 @@
 use std::collections::HashSet;
 
-use super::{Entity, component_manager::ComponentManager, signature::Signature};
+use super::{Entity, signature::Signature};
 
 static mut OBJECT_COUNTER: usize = 0;
 
 pub struct System {
     pub id: usize,
     pub signature: Signature,
-    pub update_function: fn(&mut ComponentManager, &HashSet<Entity>, f64) -> (),
+    pub update_function: fn(&HashSet<Entity>, f64) -> (),
     pub entities: HashSet<Entity>,
 }
 
 impl System {
-    pub fn new(
-        signature: Signature,
-        update_function: fn(&mut ComponentManager, &HashSet<Entity>, f64) -> (),
-    ) -> System {
+    pub fn new(signature: Signature, update_function: fn(&HashSet<Entity>, f64) -> ()) -> System {
         unsafe {
             let result = System {
                 id: OBJECT_COUNTER,

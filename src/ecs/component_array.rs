@@ -1,5 +1,11 @@
-use std::{alloc::{self, Layout}, collections::HashMap};
 use std::ptr;
+use std::{
+    alloc::{self, Layout},
+    collections::HashMap,
+};
+
+use crate::actr::_actr_log_length;
+use crate::log;
 
 use super::{Entity, MAX_ENTITIES};
 
@@ -13,13 +19,12 @@ pub struct ComponentArray {
 
 impl ComponentArray {
     pub fn new<T>() -> ComponentArray
-    where 
-        T: 'static
+    where
+        T: 'static,
     {
-
         let layout = Layout::array::<T>(MAX_ENTITIES).unwrap();
         let generic_pointer = unsafe { alloc::alloc_zeroed(layout) };
-        
+
         ComponentArray {
             generic_pointer,
             entity_to_index: HashMap::new(),
@@ -36,53 +41,83 @@ impl ComponentArray {
         next - start
     }
 
-    pub fn entity_destroyed(&mut self, entity: Entity)
-    {
+    pub fn entity_destroyed(&mut self, entity: Entity) {
         if self.entity_to_index.contains_key(&entity) {
             self.remove_data(entity);
+        } else {
+            panic!("attempt to remove {entity}");
         }
     }
-
+    pub fn log(message: String) {
+        unsafe {
+            _actr_log_length(message.as_ptr(), message.len());
+        }
+    }
     pub fn remove_data(&mut self, entity: Entity) {
         let index_removed = *self.entity_to_index.get(&entity).unwrap();
-        let index_last = self.component_count - 1;
-        
-        let entity_last = *self.index_to_entity.get(&index_last).unwrap();
-        
-        self.entity_to_index.insert(entity_last, index_removed);
-        self.index_to_entity.insert(index_removed, entity_last);
-    
-        unsafe {
-            let src = self.generic_pointer.add(index_removed * self.component_size);
-            let dst = self.generic_pointer.add(index_last * self.component_size);
-            ptr::copy_nonoverlapping(src, dst, 1);
+        if self.component_count == 0 {
+            panic!("component count already 0");
+        }
+        self.component_count -= 1;
+        let index_last = self.component_count;
+
+        if index_removed == index_last {
+            log(format!("skipping entity {entity} index {index_removed}"));
+            return;
         }
 
-        self.component_count -= 1;
+        let entity_last = *self.index_to_entity.get(&index_last).unwrap();
+
+        self.entity_to_index.insert(entity_last, index_removed);
+        self.index_to_entity.insert(index_removed, entity_last);
+
+        unsafe {
+            let src = self
+                .generic_pointer
+                .add(index_removed * self.component_size);
+            let dst = self.generic_pointer.add(index_last * self.component_size);
+            let src_addr = src.addr();
+            let dst_addr = dst.addr();
+            let sz =self.component_size;
+            log(format!("index_removed {index_removed} index_last {index_last} copy {sz} from {src_addr} to {dst_addr}"));
+            ptr::copy_nonoverlapping(src, dst, self.component_size);
+        }
+
+        
     }
 
-    pub fn insert_data<T>(&mut self, entity: Entity, mut cmp: T)
+    pub fn insert_data<T>(&mut self, entity: Entity, cmp: T)
     where
-        T: 'static
+        T: 'static,
     {
         let index = self.component_count;
         self.entity_to_index.insert(entity, index);
         self.index_to_entity.insert(index, entity);
 
-        let mut _existing = unsafe{ self.generic_pointer.add(index) as *mut T};
-        _existing = &mut cmp;
+        unsafe {
+            let pointer = self.generic_pointer as *mut T;
+            let mut _existing = pointer.add(index);
+            *_existing = cmp;
+        }
+        
         self.component_count += 1;
-    }   
-
-
-    pub fn get_component<T>(&self, entity: Entity) -> &mut T 
-    where 
-        T: 'static
-    {
-        let index = self.entity_to_index.get(&entity).unwrap();
-        let pointer = self.generic_pointer as *mut T;
-        let pointer = unsafe { pointer.add(*index) };
-        unsafe { &mut *pointer.add(*index) }
     }
 
+    pub fn get_component<T>(&self, entity: Entity) -> &mut T
+    where
+        T: 'static,
+    {
+        let index = self.entity_to_index.get(&entity).unwrap();
+        let pentity = self.index_to_entity.get(index).unwrap();
+        if *pentity != entity {
+            panic!("entity {entity} index {index} pentity {pentity}")
+        }
+        let pointer = self.generic_pointer as *mut T;
+        //log(format!("entity {entity} index {index} pentity {pentity}"));
+            
+        unsafe {
+            let pointer = pointer.add(*index);
+            &mut *pointer
+        }
+    }
 }

@@ -327,7 +327,7 @@ unsafe extern {
 	// actr_prng
 	// random number generator, this is cryptographically secure
 
-	pub fn actr_prng() -> f32;
+	pub fn actr_prng() -> f64;
 
 	// _actr_sanity
 	// set the string encoding used by your assembly

@@ -1,8 +1,8 @@
-use std::{ any::TypeId, collections::HashMap, ptr };
-use super::{component_array::{ComponentArray}, Entity};
+use super::{Entity, component_array::ComponentArray};
+use std::{any::TypeId, collections::HashMap};
 
 pub type ComponentType = u64;
-pub const MAX_COMPONENTS: ComponentType = 64;
+// pub const MAX_COMPONENTS: ComponentType = 64;
 
 pub struct ComponentManager {
     component_array: HashMap<TypeId, ComponentArray>,
@@ -11,7 +11,6 @@ pub struct ComponentManager {
 }
 
 impl ComponentManager {
-    
     pub fn new() -> ComponentManager {
         ComponentManager {
             component_array: HashMap::new(),
@@ -20,13 +19,9 @@ impl ComponentManager {
         }
     }
 
-    pub fn count(&self) -> usize {
-        self.component_array.len()
-    }
-
     pub fn register_component<T>(&mut self)
     where
-        T: 'static
+        T: 'static,
     {
         let id = TypeId::of::<T>();
         self.component_array.insert(id, ComponentArray::new::<T>());
@@ -35,18 +30,17 @@ impl ComponentManager {
     }
 
     pub fn get_component_type<T>(&self) -> ComponentType
-    where 
-        T: 'static
+    where
+        T: 'static,
     {
         let id = &TypeId::of::<T>();
         *self.component_types.get(id).unwrap()
     }
 
-    pub fn add_component<T>(&mut self, entity: Entity, component: T) 
-    where 
-        T: 'static
+    pub fn add_component<T>(&mut self, entity: Entity, component: T)
+    where
+        T: 'static,
     {
-        
         let id = &TypeId::of::<T>();
         let result = self.component_array.get_mut(id).unwrap();
         result.insert_data(entity, component);
@@ -54,7 +48,7 @@ impl ComponentManager {
 
     pub fn remove_component<T>(&mut self, entity: Entity)
     where
-        T: 'static
+        T: 'static,
     {
         let id = &TypeId::of::<T>();
         let result = self.component_array.get_mut(id).unwrap();
@@ -63,17 +57,16 @@ impl ComponentManager {
 
     pub fn get_component<T>(&self, entity: Entity) -> &mut T
     where
-        T: 'static
+        T: 'static,
     {
         let id = &TypeId::of::<T>();
         let result = self.component_array.get(id).unwrap();
-        result.get_component(entity)
+        result.get_component::<T>(entity)
     }
 
     pub fn entity_destroyed(&mut self, entity: Entity) {
-        for (id, component) in self.component_array.iter_mut() {
+        for (_id, component) in self.component_array.iter_mut() {
             component.entity_destroyed(entity);
         }
     }
-
 }

@@ -6,8 +6,8 @@ pub struct Transform {
 }
 
 impl Transform {
-    pub fn new() -> Transform {
-        Transform { position: Vector3::new(), rotation: Vector3::new() }
+    pub fn new(x: f64, y: f64, z: f64) -> Transform {
+        Transform { position: Vector3::new(x, y, z), rotation: Vector3::zero() }
     }
 }
 

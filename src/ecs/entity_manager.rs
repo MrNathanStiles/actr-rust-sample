@@ -17,13 +17,13 @@ impl EntityManager {
         };
         for n in 0..MAX_ENTITIES {
             result.available.add(n).unwrap();
+            result.signatures.push(Signature::new(0));
         }
         result
     }
     
     pub fn create_entity(&mut self) -> Entity {
         let id = self.available.remove().unwrap();
-        self.signatures.push(Signature::new(0));
         self.alive += 1;
         id
     }
@@ -32,10 +32,6 @@ impl EntityManager {
         self.signatures[entity] = Signature::zero();
         self.available.add(entity).unwrap();
         self.alive -= 1;
-    }
-
-    pub fn set_signature(&mut self, entity: Entity, signature: Signature) {
-        self.signatures[entity] = signature;
     }
 
     pub fn get_signature(&mut self, entity: Entity) -> &mut Signature {

@@ -1,4 +1,4 @@
-use std::fmt::{Display, Result};
+use std::fmt::Display;
 
 use super::component_manager::ComponentType;
 
@@ -31,7 +31,7 @@ impl Signature {
     }
 
     pub fn unset(&mut self, bit: ComponentType) {
-        let mask:  u64 = 1 << (bit - 1);
+        let mask: u64 = 1 << (bit - 1);
         self.value &= !mask;
     }
 
