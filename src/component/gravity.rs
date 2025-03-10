@@ -12,7 +12,7 @@ impl Gravity {
     }
 
     pub fn new() -> Gravity {
-        let y: f64 = Gravity::random() * -1.0;
+        let y: f64 = Gravity::random() * -10.0;
         let direction = Vector3::new(0.0, y, 0.0);
         let result = Gravity { direction };
         //log(format!("g {direction}"));

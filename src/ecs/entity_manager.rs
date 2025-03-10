@@ -31,7 +31,7 @@ impl EntityManager {
     pub fn create_entity(&mut self) -> Entity {
         let id = self.available.remove().unwrap();
         self.alive += 1;
-        self.log(format!("entity created {id}"));
+        // self.log(format!("entity created {id}"));
         id
     }
     
