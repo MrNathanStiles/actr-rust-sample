@@ -307,6 +307,7 @@ unsafe extern {
 
 	pub fn _actr_log_length(message: *const u8, length: usize);
 
+
 	// actr_malloc
 	// allocate memory, do not use if your assembly has it's own runtime for memory
 	// @param size

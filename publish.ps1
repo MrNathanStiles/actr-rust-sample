@@ -19,7 +19,7 @@ if ($LastExitCode -eq 0) {
     } else {
         curl --fail -F "file=@./build/release.wasm" $server + $apiKey
     }
-    Remove-Item -Force:$true -Confirm:$false -Recurse:$true ./target
+    #Remove-Item -Force:$true -Confirm:$false -Recurse:$true ./target
 } else {
     Write-Output "build failed"
 }

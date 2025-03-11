@@ -1,4 +1,6 @@
 
+use std::ops::DerefMut;
+
 use crate::di::container::Container;
 
 use super::{
@@ -36,7 +38,9 @@ impl Coordinator {
     {
         let container = Container::new();
         let component_manager = container.get_service::<ComponentManager>();
-
+        let mut component_manager = component_manager.lock().unwrap();
+        let component_manager = component_manager.downcast_mut::<ComponentManager>().unwrap();
+        
         component_manager.register_component::<T>();
     }
 
