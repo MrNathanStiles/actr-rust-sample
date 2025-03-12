@@ -44,8 +44,18 @@ impl ComponentManager {
     where
         T: 'static + Send,
     {
-        let array = self.get_array::<T>();
+        let array = self.get_array_mut::<T>();
         array.insert_data(entity, component);
+    }
+
+    fn get_array_mut<T>(&mut self) -> &mut ComponentArray<T>
+    where 
+        T: 'static
+    {
+        let id = &TypeId::of::<T>();
+        let boxed = self.component_array.get_mut(id).unwrap();
+        let result = boxed.as_any_mut();
+        result.downcast_mut::<ComponentArray<T>>().unwrap()
     }
 
     fn get_array<T>(&self) -> &ComponentArray<T>
@@ -71,15 +81,15 @@ impl ComponentManager {
     where
         T: 'static + Send + Clone,
     {
-        let array = self.get_array::<T>();
+        let array = self.get_array_mut::<T>();
         array.remove_data(entity);
     }
 
-    pub fn get_component<T>(&self, entity: Entity) -> &mut T
+    pub fn get_component<T>(&mut self, entity: Entity) -> &mut T
     where
         T: 'static + Send,
     {
-        let array = self.get_array::<T>();
+        let array = self.get_array_mut::<T>();
         
         array.get_component(entity)
     }
