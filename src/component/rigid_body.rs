@@ -11,3 +11,9 @@ impl RigidBody {
         }
     }
 }
+
+impl Clone for RigidBody {
+    fn clone(&self) -> Self {
+        Self { velocity: self.velocity.clone() }
+    }
+}

@@ -1,51 +1,43 @@
-use std::ptr;
-use std::{
-    alloc::{self, Layout},
-    collections::HashMap,
-};
+use std::{any::Any, collections::HashMap};
+
+use as_any::AsAny;
+
 use super::{Entity, MAX_ENTITIES};
 
-pub struct ComponentArray {
-    generic_pointer: *mut u8,
+pub struct ComponentArray<T: 'static>
+{
+    components: Vec<T>,
     entity_to_index: HashMap<Entity, usize>,
     index_to_entity: HashMap<usize, Entity>,
     component_count: usize,
-    component_size: usize,
 }
 
-impl ComponentArray {
-    pub fn new<T>() -> ComponentArray
-    where
-        T: 'static,
+pub trait ThingTrait: Any + AsAny + Send
+{
+    fn entity_destroyed(&mut self, entity: Entity);
+    fn remove_data(&mut self, entity: Entity);
+}
+
+impl<T: 'static> ThingTrait for ComponentArray<T>
+where 
+    T: 'static + Send + Clone
+{
+    fn entity_destroyed(&mut self, entity: Entity)
+    where 
+        T: 'static + Clone
     {
-        let layout = Layout::array::<T>(MAX_ENTITIES).unwrap();
-        let generic_pointer = unsafe { alloc::alloc_zeroed(layout) };
-
-        ComponentArray {
-            generic_pointer,
-            entity_to_index: HashMap::new(),
-            index_to_entity: HashMap::new(),
-            component_count: 0,
-            component_size: ComponentArray::get_component_size::<T>(generic_pointer),
-        }
-    }
-
-    fn get_component_size<T>(generic_pointer: *mut u8) -> usize {
-        let pointer = generic_pointer as *mut T;
-        let start = pointer.addr();
-        let next = unsafe { pointer.offset(1).addr() };
-        next - start
-    }
-
-    pub fn entity_destroyed(&mut self, entity: Entity) {
         if self.entity_to_index.contains_key(&entity) {
             self.remove_data(entity);
         }
     }
-    
-    pub fn remove_data(&mut self, entity: Entity) {
+
+    fn remove_data(&mut self, entity: Entity)
+    where 
+        T: 'static + Clone
+    {
+
         let index_removed = *self.entity_to_index.get(&entity).unwrap();
-        
+
         self.component_count -= 1;
         let index_last = self.component_count;
 
@@ -58,37 +50,40 @@ impl ComponentArray {
         self.entity_to_index.insert(entity_last, index_removed);
         self.index_to_entity.insert(index_removed, entity_last);
 
-        unsafe {
-            let src = self
-                .generic_pointer
-                .add(index_last * self.component_size);
-            let dst = self.generic_pointer.add(index_removed * self.component_size);
-            ptr::copy_nonoverlapping(src, dst, self.component_size);
-        }
-
         
+
+        self.components[index_removed] = self.components[index_last].clone();
     }
 
-    pub fn insert_data<T>(&mut self, entity: Entity, cmp: T)
+}
+
+impl<T> ComponentArray<T>
+{
+    pub fn new() -> ComponentArray<T>
     where
-        T: 'static,
+        T: Send + 'static,
+    {
+        ComponentArray {
+            components: Vec::<T>::with_capacity(MAX_ENTITIES),
+            entity_to_index: HashMap::new(),
+            index_to_entity: HashMap::new(),
+            component_count: 0,
+        }
+    }
+
+    pub fn insert_data(&mut self, entity: Entity, cmp: T)
     {
         let index = self.component_count;
         self.entity_to_index.insert(entity, index);
         self.index_to_entity.insert(index, entity);
 
-        // self.log(format!("component insert entity {entity} index {index}"));
 
-        unsafe {
-            let pointer = self.generic_pointer as *mut T;
-            let mut _existing = pointer.add(index);
-            *_existing = cmp;
-        }
-        
+        self.components[index] = cmp;
+
         self.component_count += 1;
     }
 
-    pub fn get_component<T>(&self, entity: Entity) -> &mut T
+    pub fn get_component(&mut self, entity: Entity) -> &mut T
     where
         T: 'static,
     {
@@ -97,12 +92,11 @@ impl ComponentArray {
         if *pentity != entity {
             panic!("entity {entity} index {index} pentity {pentity}")
         }
-        let pointer = self.generic_pointer as *mut T;
-        //log(format!("entity {entity} index {index} pentity {pentity}"));
-            
-        unsafe {
-            let pointer = pointer.add(*index);
-            &mut *pointer
-        }
+        self.components.get_mut(*index).unwrap()
+        
     }
+
+
+
+
 }

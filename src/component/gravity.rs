@@ -19,3 +19,9 @@ impl Gravity {
         result
     }
 }
+
+impl Clone for Gravity {
+    fn clone(&self) -> Self {
+        Self { direction: self.direction.clone() }
+    }
+}

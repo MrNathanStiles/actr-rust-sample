@@ -7,18 +7,19 @@ use actr::{_actr_log_length, actr_performance};
 use component::{gravity::Gravity, rigid_body::RigidBody, transform::Transform};
 use di::container::Container;
 use ecs::{
-    component_manager::{ComponentManager}, coordinator::Coordinator, entity_manager::EntityManager, signature::Signature, system::System, system_manager::SystemManager, Entity
+    component_manager::{self, ComponentManager}, coordinator::{self, Coordinator}, entity_manager::EntityManager, signature::Signature, system::System, system_manager::SystemManager, Entity
 };
 use std::collections::HashSet;
 
 fn update_sample_system(entities: &HashSet<Entity>, delta: f64) {
-    let mut container = Container::new();
-    let component_manager = container.get_service::<ComponentManager>().lock();
+    let container = Container::new();
+    let component_manager = container.get_service::<ComponentManager>();
+    let mut cm = component_manager.lock();
     let mut remove = HashSet::new();
     for entity in entities {
-        let transform = component_manager.get_component::<Transform>(*entity);
-        let gravity = component_manager.get_component::<Gravity>(*entity);
-        let rigid_body = component_manager.get_component::<RigidBody>(*entity);
+        let transform = cm.get_component::<Transform>(*entity);
+        let gravity = cm.get_component::<Gravity>(*entity);
+        let rigid_body = cm.get_component::<RigidBody>(*entity);
 
         if (transform.position.y < 0.0) {
             panic!("not fine");
@@ -33,6 +34,7 @@ fn update_sample_system(entities: &HashSet<Entity>, delta: f64) {
 
     if remove.len() > 0 {
         let coordinator = container.get_service::<Coordinator>();
+        let mut coordinator = coordinator.lock();
         for entity in remove {
             coordinator.destroy_entity(*entity);
             add_entity();
@@ -41,6 +43,7 @@ fn update_sample_system(entities: &HashSet<Entity>, delta: f64) {
 }
 
 fn register_sample_system() {
+    /*
     let container = Container::new();
     let component_manager = container.get_service::<ComponentManager>();
     let coordinator = container.get_service::<Coordinator>();
@@ -52,9 +55,11 @@ fn register_sample_system() {
     signature.set(component_manager.get_component_type::<RigidBody>());
     let sample_system = System::new(signature, update_sample_system);
     coordinator.register_system(sample_system);
+    */
 }
 
 fn add_entity() {
+    /*
     let container = Container::new();
     let coordinator = container.get_service::<Coordinator>();
     let component_manager = container.get_service::<ComponentManager>();
@@ -67,7 +72,7 @@ fn add_entity() {
     let transform = component_manager.get_component::<Transform>(entity);
     if transform.position.y != y {
         panic!("not fine");
-    }
+    }*/
 
 }
 
@@ -77,7 +82,6 @@ fn add_entity() {
 #[unsafe(no_mangle)]
 pub extern fn actr_init(_w: f32, _h: f32) {
     
-    Container::initialize();
     let mut container = Container::new();
     container.register_service(EntityManager::new());
     container.register_service(ComponentManager::new());
@@ -85,6 +89,8 @@ pub extern fn actr_init(_w: f32, _h: f32) {
     container.register_service(Coordinator::new());
 
     let coordinator = container.get_service::<Coordinator>();
+    let mut coordinator = coordinator.lock();
+    
     coordinator.register_component::<Transform>();
     coordinator.register_component::<Gravity>();
     coordinator.register_component::<RigidBody>();
@@ -99,15 +105,14 @@ pub extern fn actr_init(_w: f32, _h: f32) {
     
     container.register_service(value);
 
-    let value_1 = container.get_service::<Vec<i32>>();
-    let value_2 = container.get_service::<Vec<i32>>();
-    let value_3 = value_2.as_slice();
-
-    value_1.extend([4, 5, 6, 7, 8, 9, 10]);
+    let vec = container.get_service::<Vec<i32>>();
+    let vec2 = vec.lock();
+    let slice = vec2.as_slice();
+    let vec = container.get_service::<Vec<i32>>();
+    let mut vec2 = vec.lock();
+    vec2.extend([4, 5, 6, 7, 8, 9, 10]);
     
-    log(format!("v1 {value_1:?}"));
-    log(format!("v2 {value_2:?}"));
-    log(format!("v3 {value_3:?}"));
+    log(format!("v1 {slice:?}"));
 
 
 }
@@ -119,7 +124,7 @@ pub extern "C" fn actr_step(delta: f64) {
 
     let start = unsafe { actr_performance() };
 
-    coordinator.update(delta);
+    // coordinator.update(delta);
 
     let end = unsafe { actr_performance() };
 

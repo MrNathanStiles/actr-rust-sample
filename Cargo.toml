@@ -7,6 +7,7 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
+as-any = "0.3.2"
 parking_lot = "0.12.3"
 queues = "1.1.0"
 

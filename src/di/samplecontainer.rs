@@ -5,14 +5,12 @@ use std::sync::Arc;
 use std::sync::LazyLock;
 use std::{any::TypeId, collections::HashMap};
 
-// https://discord.com/channels/273534239310479360/1120124565591425034/1348827467766431857
-
 pub struct Container;
 
 pub struct Holder<T>(Arc<Mutex<Box<dyn Any + Send>>>, PhantomData<T>);
 
 impl<T: 'static> Holder<T> {
-    pub fn lock(&self) -> MappedMutexGuard<'_, T> {
+    fn lock(&self) -> MappedMutexGuard<'_, T> {
         MutexGuard::map(self.0.lock(), |x| x.downcast_mut().unwrap())
     }
 }
@@ -54,7 +52,6 @@ impl Container {
     }
 }
 
-/*
 fn main() {
     let value = vec![1, 2, 3];
 
@@ -68,4 +65,3 @@ fn main() {
     y.extend([4, 5, 6, 7, 8, 9, 10]);
     println!("{y:?}");
 }
-*/
