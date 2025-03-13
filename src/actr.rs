@@ -1,16 +1,10 @@
-
-
 use std::ffi::{c_char, c_void};
-#[repr(C)]
-#[allow(dead_code)]
 pub enum StringEncoding {
 	ASCII, UTF8, UTF16
 }
 // when passing string to the platform you typically pass the pointer and the string length
 // for example
 // returns 1 if current user is authenticated, meaning your program can persist data and use other required authentication features
-#[allow(unused_variables)]
-#[allow(dead_code)]
 unsafe extern {
 	// actr_performance
 	// expose browsers performance.now()
@@ -167,8 +161,9 @@ unsafe extern {
 
 	// actr_debugger
 	// pauses execution in the browser when in debug mode
+	// @param value
 
-	pub fn actr_debugger();
+	pub fn actr_debugger(value: usize);
 
 	// actr_canvas2d_draw_image
 	// @param image
@@ -213,7 +208,7 @@ unsafe extern {
 	// free allocated memory
 	// @param ptr
 
-	pub fn actr_free(ptr: *const c_void);
+	pub fn actr_free(ptr: usize);
 
 	// actr_cos
 	// @param value
@@ -353,7 +348,7 @@ unsafe extern {
 	// memory buffer for storing float vectors
 	// @param length
 
-	pub fn _actr_three_init(buffer: *const c_void, length: u32) -> bool;
+	pub fn _actr_three_init(buffer: usize, length: u32) -> bool;
 
 	// actr_three_camera_perspective
 	// initialize three perspective camera and return the identity
@@ -383,7 +378,7 @@ unsafe extern {
 	// @param vertexCount
 	// @param vertices
 
-	pub fn actr_three_geometry_buffer(indexCount: i32, indices: *const c_void, vertexCount: i32, vertices: *const c_void) -> i32;
+	pub fn actr_three_geometry_buffer(indexCount: i32, indices: usize, vertexCount: i32, vertices: usize) -> i32;
 
 	// actr_three_geometry_sphere
 	// initialize sphere geometry
@@ -497,6 +492,22 @@ unsafe extern {
 	// @param z
 
 	pub fn actr_three_object_rotation(identity: i32, x: f32, y: f32, z: f32);
+
+	// actr_three_transform_read
+
+	pub fn actr_three_transform_read();
+
+	// actr_three_transform_buffer
+	// @param index
+	// @param buffer
+	// @param offset
+	// @param count
+
+	pub fn actr_three_transform_buffer(index: usize, buffer: usize, offset: usize, count: usize);
+
+	// actr_three_render
+
+	pub fn actr_three_render();
 
 	// actr_three_object_to_local
 	// transform the provided world position to object local position

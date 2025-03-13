@@ -19,14 +19,17 @@ impl ComponentManager {
         }
     }
 
-    pub fn register_component<T>(&mut self)
+    pub fn register_component<T>(&mut self) -> usize
     where
         T: 'static,
     {
         let id = TypeId::of::<T>();
-        self.component_array.insert(id, ComponentArray::new::<T>());
+        let array = ComponentArray::new::<T>();
+        let address = array.generic_pointer as usize;
+        self.component_array.insert(id, array);
         self.component_types.insert(id, self.next_component_type);
         self.next_component_type += 1;
+        address
     }
 
     pub fn get_component_type<T>(&self) -> ComponentType

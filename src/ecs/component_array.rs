@@ -6,7 +6,7 @@ use std::{
 use super::{Entity, MAX_ENTITIES};
 
 pub struct ComponentArray {
-    generic_pointer: *mut u8,
+    pub generic_pointer: *mut u8,
     entity_to_index: HashMap<Entity, usize>,
     index_to_entity: HashMap<usize, Entity>,
     component_count: usize,

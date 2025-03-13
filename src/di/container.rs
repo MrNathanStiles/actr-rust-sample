@@ -2,14 +2,14 @@ use std::{any::TypeId, collections::HashMap};
 
 pub struct Container {}
 
-static mut GENERIC_POINTER: usize = 0; //Container::to_generic_pointer(HashMap::<TypeId, *mut u8>::new());
+static mut SERVICE_MAP: usize = 0; //Container::to_generic_pointer(HashMap::<TypeId, *mut u8>::new());
 
 impl Container {
     pub fn initialize() {
         unsafe {
-            if GENERIC_POINTER == 0 {
-                let hash_map: HashMap<TypeId, *mut u8> = HashMap::<TypeId, *mut u8>::new();
-                GENERIC_POINTER = Container::to_generic_pointer(hash_map) as usize;
+            if SERVICE_MAP == 0 {
+                let hash_map: HashMap<TypeId, usize> = HashMap::new();
+                SERVICE_MAP = Container::to_generic_pointer(hash_map);
             }
         }
     }
@@ -17,15 +17,14 @@ impl Container {
         Container {}
     }
 
-    fn to_generic_pointer<T>(thing: T) -> *mut u8
+    pub fn to_generic_pointer<T>(thing: T) -> usize
     where
         T: 'static,
     {
-        let bx = Box::new(thing);
-        Box::into_raw(bx) as *mut u8
+        Box::into_raw(Box::new(thing)) as usize
     }
 
-    fn from_generic_pointer<T>(generic_pointer: usize) -> &'static mut T
+    pub fn from_generic_pointer<T>(generic_pointer: usize) -> &'static mut T
     where
         T: 'static,
     {
@@ -33,8 +32,8 @@ impl Container {
         unsafe { &mut *pointer }
     }
 
-    fn get_services(&self) -> &'static mut HashMap<TypeId, *mut u8> {
-        unsafe { Container::from_generic_pointer::<HashMap<TypeId, *mut u8>>(GENERIC_POINTER) }
+    fn get_services(&self) -> &'static mut HashMap<TypeId, usize> {
+        unsafe { Container::from_generic_pointer::<HashMap<TypeId, usize>>(SERVICE_MAP) }
     }
 
     pub fn register_service<T>(&mut self, service: T)
@@ -47,9 +46,8 @@ impl Container {
         if services.contains_key(&id) {
             return;
         }
-        let bx = Box::new(service);
-        let raw = Box::into_raw(bx) as *mut u8;
-        services.insert(id, raw);
+        
+        services.insert(id, Container::to_generic_pointer(service));
     }
 
     pub fn get_service<T>(&self) -> &mut T

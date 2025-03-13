@@ -30,14 +30,14 @@ impl Coordinator {
         system_manager.entity_destroyed(entity);
     }
 
-    pub fn register_component<T>(&mut self)
+    pub fn register_component<T>(&mut self) -> usize
     where
         T: 'static,
     {
         let container = Container::new();
         let component_manager = container.get_service::<ComponentManager>();
 
-        component_manager.register_component::<T>();
+        component_manager.register_component::<T>()
     }
 
     pub fn add_component<T>(&mut self, entity: Entity, component: T)
