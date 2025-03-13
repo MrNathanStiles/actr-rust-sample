@@ -4,7 +4,7 @@ mod di;
 mod ecs;
 
 use actr::{_actr_log_length, actr_performance};
-use component::{gravity::Gravity, rigid_body::RigidBody, transform::Transform};
+use component::{gravity::Gravity, identity::Identity, rigid_body::RigidBody, transform::Transform};
 use di::container::Container;
 use ecs::{
     Entity, component_manager::ComponentManager, coordinator::Coordinator,
@@ -17,10 +17,18 @@ fn update_sample_system(entities: &HashSet<Entity>, delta: f64) {
     let container = Container::new();
     let component_manager = container.get_service::<ComponentManager>();
     let mut remove = HashSet::new();
+    
     for entity in entities {
         let transform = component_manager.get_component::<Transform>(*entity);
         let gravity = component_manager.get_component::<Gravity>(*entity);
         let rigid_body = component_manager.get_component::<RigidBody>(*entity);
+        let identity = component_manager.get_component::<Identity>(*entity);
+
+        if identity.entity != *entity {
+            panic!("FAIL FAIL");
+        } else {
+            log(format!("facts {entity}"));
+        }
 
         rigid_body.velocity += gravity.direction * delta;
         transform.position += rigid_body.velocity * delta;
@@ -48,6 +56,7 @@ fn register_sample_system() {
     signature.set(component_manager.get_component_type::<Transform>());
     signature.set(component_manager.get_component_type::<Gravity>());
     signature.set(component_manager.get_component_type::<RigidBody>());
+    signature.set(component_manager.get_component_type::<Identity>());
     let sample_system = System::new(signature, update_sample_system);
     coordinator.register_system(sample_system);
 }
@@ -60,6 +69,7 @@ fn add_entity() {
     coordinator.add_component(entity, Transform::new(0.0, 100.0, 0.0));
     coordinator.add_component(entity, Gravity::new());
     coordinator.add_component(entity, RigidBody::new());
+    coordinator.add_component(entity, Identity { entity });
 
 }
 #[unsafe(no_mangle)]
@@ -75,6 +85,7 @@ pub extern fn actr_init(_w: f32, _h: f32) {
     coordinator.register_component::<Transform>();
     coordinator.register_component::<Gravity>();
     coordinator.register_component::<RigidBody>();
+    coordinator.register_component::<Identity>();
 
     register_sample_system();
 
