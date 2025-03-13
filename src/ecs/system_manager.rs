@@ -1,15 +1,17 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::mpsc::Sender};
 
-use super::{signature::Signature, system::System, Entity};
+use super::{message::Message, signature::Signature, system::System, Entity};
 
 pub struct SystemManager {
+    sender: Sender<Message>,
     pub systems: HashMap<usize, System>,
 }
 
 impl SystemManager {
     
-    pub fn new() -> SystemManager {
+    pub fn new(sender: Sender<Message>) -> SystemManager {
         SystemManager {
+            sender,
             systems: HashMap::new(),
         }
     }

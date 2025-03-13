@@ -2,6 +2,8 @@ pub mod coordinator;
 pub mod component_manager;
 pub mod component_array;
 pub mod entity_manager;
+pub mod message;
+pub mod processor;
 pub mod signature;
 pub mod system;
 pub mod system_manager;

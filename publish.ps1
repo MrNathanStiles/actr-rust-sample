@@ -11,15 +11,15 @@ else {
     $server = "https://www.d1ag0n.com/api/Wasm/Upload/"
 }
     
-cargo build --target wasm32-unknown-unknown --release
+cargo build --target wasm32-unknown-unknown
 
 if ($LastExitCode -eq 0) {
     if ($local -eq "local") {
-        curl -k --fail -F "file=@./target/wasm32-unknown-unknown/release/actr_rust_sample.wasm" $server
+        curl -k --fail -F "file=@./target/wasm32-unknown-unknown/debug/actr_rust_sample.wasm" $server
     } else {
         curl --fail -F "file=@./build/release.wasm" $server + $apiKey
     }
-    #Remove-Item -Force:$true -Confirm:$false -Recurse:$true ./target
+    Remove-Item -Force:$true -Confirm:$false -Recurse:$true ./target
 } else {
     Write-Output "build failed"
 }

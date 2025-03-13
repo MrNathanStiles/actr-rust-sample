@@ -1,5 +1,7 @@
-use super::{component_array::{ComponentArray, ThingTrait}, Entity};
-use std::{any::{Any, TypeId}, collections::HashMap, ops::DerefMut};
+use crate::actr::_actr_log_length;
+
+use super::{component_array::{ComponentArray, ThingTrait}, message::Message, Entity};
+use std::{any::{Any, TypeId}, collections::HashMap, ops::DerefMut, sync::mpsc::Sender};
 
 pub type ComponentType = u64;
 // pub const MAX_COMPONENTS: ComponentType = 64;
@@ -8,23 +10,25 @@ pub struct ComponentManager {
     component_array: HashMap<TypeId, Box<dyn ThingTrait>>,
     component_types: HashMap<TypeId, ComponentType>,
     next_component_type: ComponentType,
+    sender: Sender<Message>
 }
 
 impl ComponentManager {
-    pub fn new() -> ComponentManager {
+    pub fn new(sender: Sender<Message>) -> ComponentManager {
         ComponentManager {
             component_array: HashMap::new(),
             component_types: HashMap::new(),
             next_component_type: 1,
+            sender,
         }
     }
 
-    pub fn register_component<T>(&mut self)
+    pub fn register_component<T>(&mut self, default: T)
     where
-        T: 'static + Send + Clone,
+        T: 'static + Send + Copy,
     {
         let id = TypeId::of::<T>();
-        let mut ca = ComponentArray::<T>::new();
+        let ca = ComponentArray::<T>::new(default);
         self.component_array.insert(id, Box::new(ca));
 
         self.component_types.insert(id, self.next_component_type);
@@ -39,12 +43,18 @@ impl ComponentManager {
         let id = &TypeId::of::<T>();
         *self.component_types.get(id).unwrap()
     }
-
+    pub fn log(message: String) {
+        unsafe {
+            //_actr_log_length(message.as_ptr(), message.len());
+        }
+    }
+    
     pub fn add_component<T>(&mut self, entity: Entity, component: T)
     where
         T: 'static + Send,
     {
         let array = self.get_array_mut::<T>();
+        ComponentManager::log(format!("got array mut"));
         array.insert_data(entity, component);
     }
 
@@ -85,11 +95,11 @@ impl ComponentManager {
         array.remove_data(entity);
     }
 
-    pub fn get_component<T>(&mut self, entity: Entity) -> &mut T
+    pub fn get_component<T>(&self, entity: Entity) -> *mut T
     where
         T: 'static + Send,
     {
-        let array = self.get_array_mut::<T>();
+        let array = self.get_array::<T>();
         
         array.get_component(entity)
     }
