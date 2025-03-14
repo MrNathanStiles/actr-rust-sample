@@ -28,9 +28,9 @@ fn init_systems() {
 }
 fn spherePointGen(x: f32, y: f32, z: f32) -> f32 {
     
-    let result = x * x + y * y + z * z - 1.0;
+    let result = x * x + y * y + z * z - 0.9;
 
-    log(format!("{x} {y} {z} = {result}"));
+    // log(format!("{x} {y} {z} = {result}"));
 
     return result;
 }
@@ -160,9 +160,9 @@ fn add_floor(bi: &ThreeInfo) {
     };
     
     //let geometry = unsafe {actr_three_geometry_box(1000.0, 0.1, 1000.0)};
-    let row1: Vec<f32> = Vec::from([-2.0, 2.0, 0.2]);
-    let row2: Vec<f32> = Vec::from([-2.0, 2.0, 0.2]);
-    let row3: Vec<f32> = Vec::from([-2.0, 2.0, 0.2]);
+    let row1: Vec<f32> = Vec::from([-1.0, 1.0, 0.2]);
+    let row2: Vec<f32> = Vec::from([-1.0, 1.0, 0.2]);
+    let row3: Vec<f32> = Vec::from([-1.0, 1.0, 0.2]);
     let dims: Vec<Vec<f32>> = Vec::from([row1, row2, row3]);
   
     let sng = SurfaceNetGenerator::make_data(dims, spherePointGen);

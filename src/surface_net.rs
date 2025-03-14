@@ -39,20 +39,20 @@ pub mod surface_net_data;
  type PointDataGen = fn(x: f32, y: f32, z: f32) -> f32;
 
 pub struct Precompute {
-    cube_edges: Vec<usize>,
-    edge_table: Vec<usize>,
+    cube_edges: Vec<i32>,
+    edge_table: Vec<i32>,
 }
  
 pub fn precompute_edge_table() -> Precompute {
 
-    let mut cube_edges: Vec<usize> = vec![0; 24];
-    let mut edge_table: Vec<usize> = vec![0; 256];
+    let mut cube_edges: Vec<i32> = vec![0; 24];
+    let mut edge_table: Vec<i32> = vec![0; 256];
     
      // Initialize the cube_edges table
      // This is just the vertex number of each cube
      let mut k: usize = 0;
-     let mut i: usize = 0;
-     let mut j: usize = 0;
+     let mut i: i32 = 0;
+     let mut j: i32 = 0;
      while i < 8 {
         j = 1;
         loop {

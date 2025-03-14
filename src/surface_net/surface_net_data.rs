@@ -75,8 +75,8 @@ impl SurfaceNetData {
 
                     //Read in 8 field values around this vertex and store them in an array
                     //Also calculate 8-bit mask, like in marching cubes, so we can speed up sign checks later
-                    let mut mask = 0;
-                    let mut g = 0;
+                    let mut mask: u8 = 0;
+                    let mut g: u8 = 0;
                     let mut idx = n;
                     let mut k = 0;
                     while k < 2 {
@@ -85,7 +85,8 @@ impl SurfaceNetData {
                             i = 0;
                             while i < 2 {
                                 let p = data[idx];
-                                grid[g] = p;
+                                
+                                grid[g as usize] = p;
                                 mask |= if p < 0.0 { 1 << g } else { 0 };
                                 i += 1;
                                 g += 1;
@@ -104,9 +105,11 @@ impl SurfaceNetData {
                         moot += 1;
                         continue;
                     }
+                    
+                    
 
                     //Sum up edge intersections
-                    let edge_mask = precompute.edge_table[mask];
+                    let edge_mask = precompute.edge_table[mask as usize];
                         //, v = [0.0, 0.0, 0.0]
                     let mut e_count = 0;
 
@@ -118,7 +121,7 @@ impl SurfaceNetData {
                     while i < 12 {
 
                         //Use edge mask to check if it is crossed
-                        if (edge_mask & (1 << i)) != 0 {
+                        if (edge_mask & (1 << i)) == 0 {
                             i += 1;
                             continue;
                         }
@@ -129,8 +132,8 @@ impl SurfaceNetData {
                         //Now find the point of intersection
                         let e0 = precompute.cube_edges[i << 1];       //Unpack vertices
                         let e1 = precompute.cube_edges[(i << 1) + 1];
-                        let g0 = grid[e0];                 //Unpack grid values
-                        let g1 = grid[e1];
+                        let g0 = grid[e0 as usize];                 //Unpack grid values
+                        let g1 = grid[e1 as usize];
                         let mut t = g0 - g1;                 //Compute point of intersection
                         if t.abs() > 1e-6 {
                             t = g0 / t;
@@ -166,7 +169,7 @@ impl SurfaceNetData {
                     }
 
                     //Add vertex to buffer, store pointer to vertex index in buffer
-                    log(format!("b {} {}", moot, push_count));
+                    // log(format!("b {} {}", moot, push_count));
                     buffer[moot as usize] = push_count;
                     push_count += 1;
 
@@ -186,7 +189,7 @@ impl SurfaceNetData {
                     i = 0;
                     while i < 3 {
                         //The first three entries of the edge_mask count the crossings along the edge
-                        if (edge_mask & (1 << i)) != 0 {
+                        if (edge_mask & (1 << i)) == 0 {
                             i += 1;
                             continue;
                         }
@@ -210,16 +213,19 @@ impl SurfaceNetData {
                         }
 
                         //Remember to flip orientation depending on the sign of the corner.
+                        //log(format!("mask {} {}", mask, mask & 1));
                         if (mask & 1) != 0 {
-                            //log(format!("i {} {} {} {} {} {}", moot, moot - du, moot - du - dv, moot, moot - du - dv, moot - dv));
-                            faces.push(buffer[moot as usize]);
+                            //log(format!("mask1 {}", mask));
+                            //log(format!("i1 {} {} {} {} {} {}", moot, moot - du, moot - du - dv, moot, moot - du - dv, moot - dv));
+                            faces.push(buffer[moot as usize]);                            
                             faces.push(buffer[(moot - du) as usize]);
                             faces.push(buffer[(moot - du - dv) as usize]);
                             faces.push(buffer[moot as usize]);
                             faces.push(buffer[(moot - du - dv) as usize]);
                             faces.push(buffer[(moot - dv) as usize]);
+
                         } else {
-                            //log(format!("i {} {} {} {} {} {}", moot, moot - dv, moot - du - dv, moot, moot - du - dv, moot - du));
+                            //log(format!("mask2 {}", mask));
                             faces.push(buffer[moot as usize]);
                             faces.push(buffer[(moot - dv) as usize]);
                             faces.push(buffer[(moot - du - dv) as usize]);
