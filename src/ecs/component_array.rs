@@ -9,7 +9,7 @@ pub struct ComponentArray {
     pub generic_pointer: *mut u8,
     entity_to_index: HashMap<Entity, usize>,
     index_to_entity: HashMap<usize, Entity>,
-    component_count: usize,
+    pub component_count: usize,
     component_size: usize,
 }
 

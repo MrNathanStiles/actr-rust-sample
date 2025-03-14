@@ -40,6 +40,15 @@ impl ComponentManager {
         *self.component_types.get(id).unwrap()
     }
 
+    pub fn compoennt_count<T>(&self) -> usize
+    where 
+        T: 'static
+    {
+        let id = &TypeId::of::<T>();
+        let ca = self.component_array.get(id).unwrap();
+        ca.component_count
+        
+    }
     pub fn add_component<T>(&mut self, entity: Entity, component: T)
     where
         T: 'static,

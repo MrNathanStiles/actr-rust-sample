@@ -9,7 +9,7 @@ unsafe extern {
 	// actr_performance
 	// expose browsers performance.now()
 
-	pub fn actr_performance() -> f32;
+	pub unsafe fn actr_performance() -> f32;
 
 	// abort
 	// this is specific to assembly script
@@ -18,18 +18,18 @@ unsafe extern {
 	// @param line
 	// @param column
 
-	pub fn abort(message: *const u8, fileName: *const u8, line: i32, column: i32);
+	pub unsafe fn abort(message: *const u8, fileName: *const u8, line: i32, column: i32);
 
 	// actr_authenticated
 
-	pub fn actr_authenticated() -> bool;
+	pub unsafe fn actr_authenticated() -> bool;
 
 	// actr_2d_init
 	// canvas methods should match https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 	// canvas2d methods should be avoided if using three.js support
 	// init canvas context 2d must be called before other canvas methods
 
-	pub fn actr_2d_init() -> bool;
+	pub unsafe fn actr_2d_init() -> bool;
 
 	// actr_canvas2d_fill_style
 	// set fill style rgb are 0 to 255 a is 0 to 100
@@ -38,7 +38,7 @@ unsafe extern {
 	// @param b
 	// @param a
 
-	pub fn actr_canvas2d_fill_style(r: u8, g: u8, b: u8, a: u8);
+	pub unsafe fn actr_canvas2d_fill_style(r: u8, g: u8, b: u8, a: u8);
 
 	// actr_canvas2d_stroke_style
 	// @param r
@@ -46,11 +46,11 @@ unsafe extern {
 	// @param b
 	// @param a
 
-	pub fn actr_canvas2d_stroke_style(r: u8, g: u8, b: u8, a: u8);
+	pub unsafe fn actr_canvas2d_stroke_style(r: u8, g: u8, b: u8, a: u8);
 
 	// actr_canvas2d_begin_path
 
-	pub fn actr_canvas2d_begin_path();
+	pub unsafe fn actr_canvas2d_begin_path();
 
 	// actr_canvas2d_arc
 	// @param x
@@ -60,7 +60,7 @@ unsafe extern {
 	// @param endAngle
 	// @param counterclockwise
 
-	pub fn actr_canvas2d_arc(x: f32, y: f32, radius: f32, startAngle: f32, endAngle: f32, counterclockwise: bool);
+	pub unsafe fn actr_canvas2d_arc(x: f32, y: f32, radius: f32, startAngle: f32, endAngle: f32, counterclockwise: bool);
 
 	// actr_canvas2d_arcTo
 	// @param x1
@@ -69,11 +69,11 @@ unsafe extern {
 	// @param y2
 	// @param radius
 
-	pub fn actr_canvas2d_arcTo(x1: f32, y1: f32, x2: f32, y2: f32, radius: f32);
+	pub unsafe fn actr_canvas2d_arcTo(x1: f32, y1: f32, x2: f32, y2: f32, radius: f32);
 
 	// actr_canvas2d_close_path
 
-	pub fn actr_canvas2d_close_path();
+	pub unsafe fn actr_canvas2d_close_path();
 
 	// actr_canvas2d_ellipse
 	// @param x
@@ -85,11 +85,11 @@ unsafe extern {
 	// @param endAngle
 	// @param counterclockwise
 
-	pub fn actr_canvas2d_ellipse(x: f32, y: f32, radiusX: f32, radiusY: f32, rotation: f32, startAngle: f32, endAngle: f32, counterclockwise: bool);
+	pub unsafe fn actr_canvas2d_ellipse(x: f32, y: f32, radiusX: f32, radiusY: f32, rotation: f32, startAngle: f32, endAngle: f32, counterclockwise: bool);
 
 	// actr_canvas2d_fill
 
-	pub fn actr_canvas2d_fill();
+	pub unsafe fn actr_canvas2d_fill();
 
 	// actr_canvas2d_fill_rect
 	// @param x
@@ -448,7 +448,7 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_position(identity: i32, x: f32, y: f32, z: f32);
+	pub fn actr_three_object_position(identity: i32, x: f64, y: f64, z: f64);
 
 	// actr_three_object_remove
 	// remove object from object
