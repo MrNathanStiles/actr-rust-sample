@@ -60,8 +60,6 @@ impl SurfaceNetData {
         // March over the voxel grid
         while x[2] < dims[2] - 1 {
 
-            log(format!("generate net"));
-
             // m is the pointer into the buffer we are going to use.  
             // This is slightly obtuse because javascript does not have good support for packed data structures, so we must use typed arrays :(
             // The contents of the buffer will be the indices of the vertices on the previous x/y slice of the volume
@@ -189,8 +187,11 @@ impl SurfaceNetData {
                     i = 0;
                     while i < 3 {
                         //The first three entries of the edge_mask count the crossings along the edge
+                        let wtf = edge_mask & (1 << i);
+                        //log(format!("wtf {wtf}"));
                         if (edge_mask & (1 << i)) == 0 {
                             i += 1;
+                            //log(format!("skip at edge mask"));
                             continue;
                         }
 
@@ -201,16 +202,16 @@ impl SurfaceNetData {
                         //If we are on a boundary, skip it
                         if x[iu] == 0 || x[iv] == 0 {
                             i += 1;
+                        
                             continue;
                         }
+                        //log(format!("x[iu]={}, x[iv]={}", x[iu], x[iv]));
 
                         //Otherwise, look up adjacent edges in buffer
                         let du: isize = root[iu];
                         let dv: isize = root[iv];
                         //log(format!("root {} {} {} du {} dv {}", root[0], root[1], root[2], du, dv));
-                        if moot < du || moot < dv || moot < dv + du {
-                            log(format!("fail moot {moot} du {du} dv {dv}"));
-                        }
+                        
 
                         //Remember to flip orientation depending on the sign of the corner.
                         //log(format!("mask {} {}", mask, mask & 1));

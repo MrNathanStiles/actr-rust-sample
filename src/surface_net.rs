@@ -1,3 +1,5 @@
+use crate::actr::_actr_log_length;
+
 pub mod surface_net;
 pub mod surface_net_generator;
 pub mod surface_net_data;
@@ -42,7 +44,11 @@ pub struct Precompute {
     cube_edges: Vec<i32>,
     edge_table: Vec<i32>,
 }
- 
+pub fn log(message: String) {
+    unsafe {
+        _actr_log_length(message.as_ptr(), message.len());
+    }
+}
 pub fn precompute_edge_table() -> Precompute {
 
     let mut cube_edges: Vec<i32> = vec![0; 24];
@@ -79,13 +85,18 @@ pub fn precompute_edge_table() -> Precompute {
          let mut em = 0;
          let mut j = 0;
          while j < 24 {
-             let a = !!(i & (1 << cube_edges[j]));
-             let b = !!(i & (1 << cube_edges[j + 1]));
+             let mut a = (i & (1 << cube_edges[j]));
+             let mut b = (i & (1 << cube_edges[j + 1]));
+
+             if a > 0 { a = 1;}
+             if b > 0 { b = 1;}
+
+             log(format!("a {} b {}", a, b));
              em |= if a != b { (1 << (j >> 1)) } else {0};
              j += 2;
          }
          edge_table[i] = em;
-         
+         log(format!("edge_table {}", edge_table[i]));
      }
      Precompute {
         cube_edges,

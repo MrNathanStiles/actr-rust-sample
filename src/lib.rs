@@ -50,7 +50,7 @@ fn update_sample_system(entities: &HashSet<Entity>, delta: f64) {
         transform.position += rigid_body.velocity * delta;
         transform.rotation += rigid_body.angularVelocity * delta;
 
-        if transform.position.y < -200.0 {
+        if transform.position.y < -0.0 {
             remove.insert(entity);
         }
     }
