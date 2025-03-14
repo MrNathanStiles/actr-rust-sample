@@ -166,6 +166,7 @@ impl SurfaceNetData {
                     }
 
                     //Add vertex to buffer, store pointer to vertex index in buffer
+                    log(format!("b {} {}", moot, push_count));
                     buffer[moot as usize] = push_count;
                     push_count += 1;
 
@@ -203,13 +204,14 @@ impl SurfaceNetData {
                         //Otherwise, look up adjacent edges in buffer
                         let du: isize = root[iu];
                         let dv: isize = root[iv];
-                        log(format!("root {} {} {}", root[0], root[1], root[2]));
+                        //log(format!("root {} {} {} du {} dv {}", root[0], root[1], root[2], du, dv));
                         if moot < du || moot < dv || moot < dv + du {
                             log(format!("fail moot {moot} du {du} dv {dv}"));
                         }
 
                         //Remember to flip orientation depending on the sign of the corner.
                         if (mask & 1) != 0 {
+                            //log(format!("i {} {} {} {} {} {}", moot, moot - du, moot - du - dv, moot, moot - du - dv, moot - dv));
                             faces.push(buffer[moot as usize]);
                             faces.push(buffer[(moot - du) as usize]);
                             faces.push(buffer[(moot - du - dv) as usize]);
@@ -217,6 +219,7 @@ impl SurfaceNetData {
                             faces.push(buffer[(moot - du - dv) as usize]);
                             faces.push(buffer[(moot - dv) as usize]);
                         } else {
+                            //log(format!("i {} {} {} {} {} {}", moot, moot - dv, moot - du - dv, moot, moot - du - dv, moot - du));
                             faces.push(buffer[moot as usize]);
                             faces.push(buffer[(moot - dv) as usize]);
                             faces.push(buffer[(moot - du - dv) as usize]);

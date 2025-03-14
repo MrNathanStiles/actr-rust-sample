@@ -271,12 +271,10 @@ pub extern "C" fn actr_init(_w: i32, _h: i32) {
         add_entity(&three_info);
     }
     
-
     unsafe {
         actr_three_object_position(three_info.camera, 0.0, 0.0, 400.0);
         actr_three_object_lookat(three_info.camera, 0.0, 0.0, 0.0);
     }
-    
     
     update_transform_buffer();
 
@@ -284,7 +282,6 @@ pub extern "C" fn actr_init(_w: i32, _h: i32) {
 
 #[unsafe(no_mangle)]
 pub extern "C" fn actr_step(delta: f64) {
-    log(format!("stepping {delta}"));
     let container = Container::new();
     let coor = container.get_service::<Coordinator>();
     let three_info = container.get_service::<ThreeInfo>();
