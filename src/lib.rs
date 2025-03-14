@@ -2,9 +2,10 @@ pub mod actr;
 pub mod component;
 pub mod di;
 pub mod ecs;
+pub mod surface_net;
 
 use actr::{
-    _actr_log_length, _actr_three_init, actr_performance, actr_prng, actr_three_camera_perspective, actr_three_geometry_box, actr_three_material_standard, actr_three_mesh, actr_three_object_add, actr_three_object_lookat, actr_three_object_position, actr_three_object_remove, actr_three_render, actr_three_scene, actr_three_transform_buffer, actr_three_transform_read
+    _actr_log_length, _actr_three_init, actr_performance, actr_prng, actr_three_camera_perspective, actr_three_geometry_box, actr_three_geometry_buffer, actr_three_material_standard, actr_three_mesh, actr_three_object_add, actr_three_object_lookat, actr_three_object_position, actr_three_object_remove, actr_three_render, actr_three_scene, actr_three_transform_buffer, actr_three_transform_read
 };
 use component::{
     gravity::Gravity, rigid_body::RigidBody, transform::Transform, vector3::Vector3,
@@ -15,6 +16,7 @@ use ecs::{
     entity_manager::EntityManager, signature::Signature, system::System,
     system_manager::SystemManager,
 };
+use surface_net::{precompute_edge_table, surface_net_generator::SurfaceNetGenerator};
 use std::{
     alloc::{self, alloc, Layout},
     collections::HashSet, panic::{self, PanicHookInfo},
@@ -23,6 +25,14 @@ use std::{
 fn init_systems() {
     register_sample_system();
     register_mesh_transformer_system();
+}
+fn spherePointGen(x: f32, y: f32, z: f32) -> f32 {
+    
+    let result = x * x + y * y + z * z - 1.0;
+
+    log(format!("{x} {y} {z} = {result}"));
+
+    return result;
 }
 fn update_sample_system(entities: &HashSet<Entity>, delta: f64) {
     let container = Container::new();
@@ -149,9 +159,20 @@ fn add_floor(bi: &ThreeInfo) {
         actr_three_material_standard(0xffffff, 0xffffff, false, 1.0, false, true)
     };
     
-    let geometry = unsafe {actr_three_geometry_box(1000.0, 0.1, 1000.0)};
+    //let geometry = unsafe {actr_three_geometry_box(1000.0, 0.1, 1000.0)};
+    let row1: Vec<f32> = Vec::from([-2.0, 2.0, 0.2]);
+    let row2: Vec<f32> = Vec::from([-2.0, 2.0, 0.2]);
+    let row3: Vec<f32> = Vec::from([-2.0, 2.0, 0.2]);
+    let dims: Vec<Vec<f32>> = Vec::from([row1, row2, row3]);
+  
+    let sng = SurfaceNetGenerator::make_data(dims, spherePointGen);
+    log(format!("pre cmputing"));
+    let precompute = precompute_edge_table();
+    let net = sng.generate_net(precompute);
 
-    let mesh = unsafe { actr_three_mesh(geometry, material) };
+    
+
+    let mesh = unsafe { actr_three_mesh(net.geometry, net.material) };
 
     let entity = coordinator.create_entity();
     log(format!("floor entity {entity} mesh {mesh}"));
@@ -269,11 +290,11 @@ pub extern "C" fn actr_step(delta: f64) {
     let three_info = container.get_service::<ThreeInfo>();
 
 
-    let dist = 500.0;
+    let dist = 10.0;
     three_info.camera_state += delta * 0.1;
     unsafe {
-        actr_three_object_position(three_info.camera, three_info.camera_state.cos() * dist, 0.0, three_info.camera_state.sin() * dist);
-        actr_three_object_lookat(three_info.camera, 0.0, 0.0, 0.0);
+        actr_three_object_position(three_info.camera, three_info.camera_state.cos() * dist, -200.0, three_info.camera_state.sin() * dist);
+        actr_three_object_lookat(three_info.camera, 0.0, -200.0, 0.0);
     }
     
     //let start = unsafe { actr_performance() };

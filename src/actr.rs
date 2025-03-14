@@ -97,7 +97,7 @@ unsafe extern {
 	// @param w
 	// @param h
 
-	pub fn actr_canvas2d_fill_rect(x: f32, y: f32, w: f32, h: f32);
+	pub unsafe fn actr_canvas2d_fill_rect(x: f32, y: f32, w: f32, h: f32);
 
 	// _actr_canvas2d_fill_text_length
 	// @param x
@@ -105,7 +105,7 @@ unsafe extern {
 	// @param ptr
 	// @param length
 
-	pub fn _actr_canvas2d_fill_text_length(x: f32, y: f32, ptr: *const u8, length: i32);
+	pub unsafe fn _actr_canvas2d_fill_text_length(x: f32, y: f32, ptr: *const u8, length: i32);
 
 	// actr_canvas2d_fill_gradient_all
 	// fill a gradient of many colors useful for color picker
@@ -114,7 +114,7 @@ unsafe extern {
 	// @param w
 	// @param h
 
-	pub fn actr_canvas2d_fill_gradient_all(x: f32, y: f32, w: f32, h: f32);
+	pub unsafe fn actr_canvas2d_fill_gradient_all(x: f32, y: f32, w: f32, h: f32);
 
 	// actr_canvas2d_fill_gradient_pick
 	// fill gradient of specific color useful for color picker
@@ -126,30 +126,30 @@ unsafe extern {
 	// @param g
 	// @param b
 
-	pub fn actr_canvas2d_fill_gradient_pick(x: f32, y: f32, w: f32, h: f32, r: u8, g: u8, b: u8);
+	pub unsafe fn actr_canvas2d_fill_gradient_pick(x: f32, y: f32, w: f32, h: f32, r: u8, g: u8, b: u8);
 
 	// actr_canvas2d_pick
 	// returns the color at the specified position
 	// @param x
 	// @param y
 
-	pub fn actr_canvas2d_pick(x: f32, y: f32) -> u32;
+	pub unsafe fn actr_canvas2d_pick(x: f32, y: f32) -> u32;
 
 	// actr_canvas2d_moveto
 	// @param x
 	// @param y
 
-	pub fn actr_canvas2d_moveto(x: f32, y: f32);
+	pub unsafe fn actr_canvas2d_moveto(x: f32, y: f32);
 
 	// actr_canvas2d_lineto
 	// @param x
 	// @param y
 
-	pub fn actr_canvas2d_lineto(x: f32, y: f32);
+	pub unsafe fn actr_canvas2d_lineto(x: f32, y: f32);
 
 	// actr_canvas2d_stroke
 
-	pub fn actr_canvas2d_stroke();
+	pub unsafe fn actr_canvas2d_stroke();
 
 	// actr_canvas2d_stroke_rect
 	// @param x
@@ -157,13 +157,13 @@ unsafe extern {
 	// @param w
 	// @param h
 
-	pub fn actr_canvas2d_stroke_rect(x: f32, y: f32, w: f32, h: f32);
+	pub unsafe fn actr_canvas2d_stroke_rect(x: f32, y: f32, w: f32, h: f32);
 
 	// actr_debugger
 	// pauses execution in the browser when in debug mode
 	// @param value
 
-	pub fn actr_debugger(value: usize);
+	pub unsafe fn actr_debugger(value: usize);
 
 	// actr_canvas2d_draw_image
 	// @param image
@@ -176,7 +176,7 @@ unsafe extern {
 	// @param dWidth
 	// @param dHeight
 
-	pub fn actr_canvas2d_draw_image(image: f32, sx: f32, sy: f32, sWidth: f32, sHeight: f32, dx: f32, dy: f32, dWidth: f32, dHeight: f32);
+	pub unsafe fn actr_canvas2d_draw_image(image: f32, sx: f32, sy: f32, sWidth: f32, sHeight: f32, dx: f32, dy: f32, dWidth: f32, dHeight: f32);
 
 	// _actr_fetch_json_length
 	// fetch json from the provided url
@@ -184,7 +184,7 @@ unsafe extern {
 	// @param urlLength
 	// @param jsonId
 
-	pub fn _actr_fetch_json_length(url: *const u8, urlLength: u32, jsonId: i32) -> i32;
+	pub unsafe fn _actr_fetch_json_length(url: *const u8, urlLength: u32, jsonId: i32) -> i32;
 
 	// _actr_fetch_image_length
 	// fetch the image from the provided url
@@ -192,7 +192,7 @@ unsafe extern {
 	// @param urlLength
 	// @param jsonId
 
-	pub fn _actr_fetch_image_length(url: *const u8, urlLength: u32, jsonId: i32) -> i32;
+	pub unsafe fn _actr_fetch_image_length(url: *const u8, urlLength: u32, jsonId: i32) -> i32;
 
 	// _actr_fetch_text_length
 	// fetch text from the provided url
@@ -202,55 +202,55 @@ unsafe extern {
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_fetch_text_length(url: *const u8, urlLength: u32, jsonId: i32, path: *const u8, pathLength: u32) -> i32;
+	pub unsafe fn _actr_fetch_text_length(url: *const u8, urlLength: u32, jsonId: i32, path: *const u8, pathLength: u32) -> i32;
 
 	// actr_free
 	// free allocated memory
 	// @param ptr
 
-	pub fn actr_free(ptr: usize);
+	pub unsafe fn actr_free(ptr: usize);
 
 	// actr_cos
 	// @param value
 
-	pub fn actr_cos(value: f64) -> f64;
+	pub unsafe fn actr_cos(value: f64) -> f64;
 
 	// actr_sin
 	// @param value
 
-	pub fn actr_sin(value: f64) -> f64;
+	pub unsafe fn actr_sin(value: f64) -> f64;
 
 	// actr_sqrt
 	// @param value
 
-	pub fn actr_sqrt(value: f64) -> f64;
+	pub unsafe fn actr_sqrt(value: f64) -> f64;
 
 	// actr_atan2
 	// @param y
 	// @param x
 
-	pub fn actr_atan2(y: f64, x: f64) -> f64;
+	pub unsafe fn actr_atan2(y: f64, x: f64) -> f64;
 
 	// _actr_json_get_int_length
 	// @param jsonId
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_json_get_int_length(jsonId: i32, path: *const u8, pathLength: u32) -> i64;
+	pub unsafe fn _actr_json_get_int_length(jsonId: i32, path: *const u8, pathLength: u32) -> i64;
 
 	// _actr_json_get_float_length
 	// @param jsonId
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_json_get_float_length(jsonId: i32, path: *const u8, pathLength: u32) -> f64;
+	pub unsafe fn _actr_json_get_float_length(jsonId: i32, path: *const u8, pathLength: u32) -> f64;
 
 	// _actr_json_get_string_length
 	// @param jsonId
 	// @param path
 	// @param pathLength
 
-	pub fn _actr_json_get_string_length(jsonId: i32, path: *const u8, pathLength: u32) -> i32;
+	pub unsafe fn _actr_json_get_string_length(jsonId: i32, path: *const u8, pathLength: u32) -> i32;
 
 	// _actr_json_set_int_length
 	// @param jsonId
@@ -258,7 +258,7 @@ unsafe extern {
 	// @param pathLength
 	// @param value
 
-	pub fn _actr_json_set_int_length(jsonId: i32, path: *const u8, pathLength: u32, value: i64);
+	pub unsafe fn _actr_json_set_int_length(jsonId: i32, path: *const u8, pathLength: u32, value: i64);
 
 	// _actr_json_set_float_length
 	// @param jsonId
@@ -266,7 +266,7 @@ unsafe extern {
 	// @param pathLength
 	// @param value
 
-	pub fn _actr_json_set_float_length(jsonId: i32, path: *const u8, pathLength: u32, value: f64);
+	pub unsafe fn _actr_json_set_float_length(jsonId: i32, path: *const u8, pathLength: u32, value: f64);
 
 	// _actr_json_set_string_length
 	// @param jsonId
@@ -275,70 +275,70 @@ unsafe extern {
 	// @param value
 	// @param valueLength
 
-	pub fn _actr_json_set_string_length(jsonId: i32, path: *const u8, pathLength: u32, value: *const u8, valueLength: u32);
+	pub unsafe fn _actr_json_set_string_length(jsonId: i32, path: *const u8, pathLength: u32, value: *const u8, valueLength: u32);
 
 	// actr_json_store
 	// persist the json object to server storage
 	// @param jsonId
 
-	pub fn actr_json_store(jsonId: i32) -> i32;
+	pub unsafe fn actr_json_store(jsonId: i32) -> i32;
 
 	// actr_json_load
 	// load the json object from server storage
 	// @param jsonId
 
-	pub fn actr_json_load(jsonId: i32) -> i32;
+	pub unsafe fn actr_json_load(jsonId: i32) -> i32;
 
 	// actr_json_delete
 	// delete the json object from server storage
 	// @param jsonId
 
-	pub fn actr_json_delete(jsonId: i32) -> i32;
+	pub unsafe fn actr_json_delete(jsonId: i32) -> i32;
 
 	// _actr_log_length
 	// log a message to the console when in debug mode
 	// @param message
 	// @param length
 
-	pub fn _actr_log_length(message: *const u8, length: usize);
+	pub unsafe fn _actr_log_length(message: *const u8, length: usize);
 
 	// actr_malloc
 	// allocate memory, do not use if your assembly has it's own runtime for memory
 	// @param size
 
-	pub fn actr_malloc(size: u32) -> *const c_void;
+	pub unsafe fn actr_malloc(size: u32) -> *const c_void;
 
 	// actr_memory_report
 	// return string pointer to a report about memory usage do not use if your assembly has it's own runtime for memory
 	// allocates, must be freed manually
 
-	pub fn actr_memory_report() -> *const c_char;
+	pub unsafe fn actr_memory_report() -> *const c_char;
 
 	// actr_memory_usage
 	// report memory usage in bytes do not use if your assembly has it's own runtime for memory
 
-	pub fn actr_memory_usage() -> u32;
+	pub unsafe fn actr_memory_usage() -> u32;
 
 	// actr_prng
 	// random number generator, this is cryptographically secure
 
-	pub fn actr_prng() -> f64;
+	pub unsafe fn actr_prng() -> f64;
 
 	// _actr_sanity
 	// set the string encoding used by your assembly
 	// @param stringEncoding
 
-	pub fn _actr_sanity(stringEncoding: StringEncoding);
+	pub unsafe fn _actr_sanity(stringEncoding: StringEncoding);
 
 	// actr_time
 	// current unix time
 
-	pub fn actr_time() -> u32;
+	pub unsafe fn actr_time() -> u32;
 
 	// actr_time_string
 	// current javascript time string, allocates must be freed manually, do not use if your runtime has memory management
 
-	pub fn actr_time_string() -> *const c_char;
+	pub unsafe fn actr_time_string() -> *const c_char;
 
 	// _actr_three_init
 	// three js support is complicated, I'll try to make it possible for simpleparts of three and expand over time
@@ -348,7 +348,7 @@ unsafe extern {
 	// memory buffer for storing float vectors
 	// @param length
 
-	pub fn _actr_three_init(buffer: usize, length: u32) -> bool;
+	pub unsafe fn _actr_three_init(buffer: usize, length: u32) -> bool;
 
 	// actr_three_camera_perspective
 	// initialize three perspective camera and return the identity
@@ -356,12 +356,12 @@ unsafe extern {
 	// @param near
 	// @param far
 
-	pub fn actr_three_camera_perspective(fov: f32, near: f32, far: f32) -> i32;
+	pub unsafe fn actr_three_camera_perspective(fov: f32, near: f32, far: f32) -> i32;
 
 	// actr_three_geometry_dispose
 	// @param identity
 
-	pub fn actr_three_geometry_dispose(identity: i32);
+	pub unsafe fn actr_three_geometry_dispose(identity: i32);
 
 	// actr_three_geometry_box
 	// initialize box geometry
@@ -369,7 +369,7 @@ unsafe extern {
 	// @param height
 	// @param depth
 
-	pub fn actr_three_geometry_box(width: f32, height: f32, depth: f32) -> i32;
+	pub unsafe fn actr_three_geometry_box(width: f32, height: f32, depth: f32) -> i32;
 
 	// actr_three_geometry_buffer
 	// initialize buffer geometry with provided index/vertex list
@@ -378,7 +378,7 @@ unsafe extern {
 	// @param vertexCount
 	// @param vertices
 
-	pub fn actr_three_geometry_buffer(indexCount: i32, indices: usize, vertexCount: i32, vertices: usize) -> i32;
+	pub unsafe fn actr_three_geometry_buffer(indexCount: usize, indices: usize, vertexCount: usize, vertices: usize) -> i32;
 
 	// actr_three_geometry_sphere
 	// initialize sphere geometry
@@ -386,29 +386,29 @@ unsafe extern {
 	// @param width
 	// @param height
 
-	pub fn actr_three_geometry_sphere(radius: f32, width: i32, height: i32) -> i32;
+	pub unsafe fn actr_three_geometry_sphere(radius: f32, width: i32, height: i32) -> i32;
 
 	// actr_three_light_dispose
 	// @param identity
 
-	pub fn actr_three_light_dispose(identity: i32);
+	pub unsafe fn actr_three_light_dispose(identity: i32);
 
 	// actr_three_light_ambient
 	// @param color
 	// @param intensity
 
-	pub fn actr_three_light_ambient(color: u32, intensity: f32) -> i32;
+	pub unsafe fn actr_three_light_ambient(color: u32, intensity: f32) -> i32;
 
 	// actr_three_light_directional
 	// @param color
 	// @param intensity
 
-	pub fn actr_three_light_directional(color: u32, intensity: f32) -> i32;
+	pub unsafe fn actr_three_light_directional(color: u32, intensity: f32) -> i32;
 
 	// actr_three_material_dispose
 	// @param object
 
-	pub fn actr_three_material_dispose(object: i32);
+	pub unsafe fn actr_three_material_dispose(object: i32);
 
 	// actr_three_material_standard
 	// @param color
@@ -418,20 +418,20 @@ unsafe extern {
 	// @param wireframe
 	// @param flatShading
 
-	pub fn actr_three_material_standard(color: u32, emissive: u32, transparent: bool, opacity: f32, wireframe: bool, flatShading: bool) -> i32;
+	pub unsafe fn actr_three_material_standard(color: u32, emissive: u32, transparent: bool, opacity: f32, wireframe: bool, flatShading: bool) -> i32;
 
 	// actr_three_mesh
 	// @param geometry
 	// @param material
 
-	pub fn actr_three_mesh(geometry: i32, material: i32) -> i32;
+	pub unsafe fn actr_three_mesh(geometry: i32, material: i32) -> i32;
 
 	// actr_three_object_add
 	// add object to other object
 	// @param containerIdentity
 	// @param objectIdentity
 
-	pub fn actr_three_object_add(containerIdentity: i32, objectIdentity: i32);
+	pub unsafe fn actr_three_object_add(containerIdentity: i32, objectIdentity: i32);
 
 	// actr_three_object_lookat
 	// @param identity
@@ -439,7 +439,7 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_lookat(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_lookat(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_object_position
 	// set object position
@@ -448,14 +448,14 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_position(identity: i32, x: f64, y: f64, z: f64);
+	pub unsafe fn actr_three_object_position(identity: i32, x: f64, y: f64, z: f64);
 
 	// actr_three_object_remove
 	// remove object from object
 	// @param containerIdentity
 	// @param objectIdentity
 
-	pub fn actr_three_object_remove(containerIdentity: i32, objectIdentity: i32);
+	pub unsafe fn actr_three_object_remove(containerIdentity: i32, objectIdentity: i32);
 
 	// actr_three_object_move_local
 	// translate the object in local space
@@ -464,7 +464,7 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_move_local(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_move_local(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_object_move_world
 	// translate the objecy in world space
@@ -473,7 +473,7 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_move_world(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_move_world(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_object_rotate
 	// rotate the object
@@ -482,7 +482,7 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_rotate(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_rotate(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_object_rotation
 	// set object rotation
@@ -491,11 +491,11 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_rotation(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_rotation(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_transform_read
 
-	pub fn actr_three_transform_read();
+	pub unsafe fn actr_three_transform_read();
 
 	// actr_three_transform_buffer
 	// @param index
@@ -503,11 +503,11 @@ unsafe extern {
 	// @param offset
 	// @param count
 
-	pub fn actr_three_transform_buffer(index: usize, buffer: usize, offset: usize, count: usize);
+	pub unsafe fn actr_three_transform_buffer(index: usize, buffer: usize, offset: usize, count: usize);
 
 	// actr_three_render
 
-	pub fn actr_three_render();
+	pub unsafe fn actr_three_render();
 
 	// actr_three_object_to_local
 	// transform the provided world position to object local position
@@ -516,7 +516,7 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_to_local(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_to_local(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_object_to_world
 	// transform the provided object local position to world position
@@ -525,16 +525,16 @@ unsafe extern {
 	// @param y
 	// @param z
 
-	pub fn actr_three_object_to_world(identity: i32, x: f32, y: f32, z: f32);
+	pub unsafe fn actr_three_object_to_world(identity: i32, x: f32, y: f32, z: f32);
 
 	// actr_three_scene
 	// initialize a scene, can only be done once
 
-	pub fn actr_three_scene() -> i32;
+	pub unsafe fn actr_three_scene() -> i32;
 
 	// seed
 	// this is specific to Assembly Script
 
-	pub fn seed() -> f64;
+	pub unsafe fn seed() -> f64;
 
 }
